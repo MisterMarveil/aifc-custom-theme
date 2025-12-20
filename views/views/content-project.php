@@ -26,7 +26,7 @@ if( finwave_option( 'rt_project_filter' ) == 'grayscale' ) {
 		<div class="project-content d-flex justify-content-between">
 			<div class="project-info">
 			    bridge
-				<h2 class="project-title"><a href="<?php the_permalink();?>">MY BRIDGE <?php the_title();?></a></h2>
+				<h2 class="project-title"><a href="<?php the_permalink();?>">MY BRIDGE-0 <?php the_title();?></a></h2>
 				<?php if ( finwave_option( 'rt_project_ar_cat' ) ) { ?>
 				<span class="project-cat"><?php
 					$i = 1;
