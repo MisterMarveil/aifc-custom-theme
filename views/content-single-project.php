@@ -29,7 +29,7 @@ $rt_project_rating = 5- intval( $ratting );
 				<div class="project-information">
 					<?php if ( !empty( $rt_project_title ) && finwave_option( 'rt_project_title' )) { ?>
 						<div class="rt-section-title style3 has-animation">
-							<h2 class="info-title"><?php echo esc_html( $rt_project_title );?><span class="line"></span></h2>
+							<h2 class="info-title">BRIDGE GOOD<?php echo esc_html( $rt_project_title );?><span class="line"></span></h2>
 						</div>
 					<?php } if ( !empty( $rt_project_text ) && finwave_option( 'rt_project_text' ) ) { ?>
 						<p><?php echo esc_html( $rt_project_text );?></p>
