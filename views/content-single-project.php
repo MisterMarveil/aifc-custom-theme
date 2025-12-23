@@ -11,12 +11,13 @@ use RT\Finwave\Options\Opt;
 
 global $post;
 $id = get_the_ID();
-$rt_project_title 		= get_post_meta( $id, 'rt_project_title', true );
-$rt_project_text 		= get_post_meta( $id, 'rt_project_text', true );
-$rt_project_client 		= get_post_meta( $id, 'rt_project_client', true );
-$rt_project_start 		= get_post_meta( $id, 'rt_project_start', true );
-$rt_project_end 		= get_post_meta( $id, 'rt_project_end', true );
-$rt_project_weblink 	= get_post_meta( $id, 'rt_project_weblink', true );
+$rt_project_title 		= get_post_meta( $id, 'rt_project_title', true);
+$rt_project_text 		= get_post_meta( $id, 'rt_project_text', true);
+$rt_project_client 		= get_post_meta( $id, 'rt_project_client', true);
+$rt_project_start 		= get_post_meta( $id, 'rt_project_start', true);
+$rt_project_end 		= get_post_meta( $id, 'rt_project_end', true);
+$rt_project_weblink 	= get_post_meta( $id, 'rt_project_weblink', true);
+$rt_project_weblink 	= get_post_meta( $id, 'rt_project_weblink', true);
 
 $ratting	 	= get_post_meta( $id, 'rt_project_rating', true );
 $rt_project_rating = 5- intval( $ratting );
