@@ -652,7 +652,7 @@ function enqueue_sticky_menu_script() {
     
     // Variables à passer au script
     wp_localize_script('sticky-menu', 'stickyMenuVars', array(
-        'selector' => '.site-header', // Ajustez selon votre thème
+        'selector' => '#masthead', // Ajustez selon votre thème
         'offset' => 100,
         'adminBar' => true
     ));
