@@ -637,3 +637,23 @@ function rt_replace_project_texts($translated_text, $text, $domain) {
     }
     return $translated_text;
 }
+
+
+// Enqueue le script sticky menu
+add_action('wp_enqueue_scripts', 'enqueue_sticky_menu_script');
+function enqueue_sticky_menu_script() {
+    wp_enqueue_script(
+        'sticky-menu',
+        get_stylesheet_directory_uri() . '/js/sticky-menu.js',
+        array('jquery'),
+        '1.0.0',
+        true
+    );
+    
+    // Variables à passer au script
+    wp_localize_script('sticky-menu', 'stickyMenuVars', array(
+        'selector' => '.site-header', // Ajustez selon votre thème
+        'offset' => 100,
+        'adminBar' => true
+    ));
+}
