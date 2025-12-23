@@ -313,56 +313,6 @@ function rt_formation_sortable_columns($columns) {
 }
 
 
-// Ajouter des colonnes personnalisées dans la liste des formations
-add_filter('manage_rt-project_posts_columns', 'rt_formation_admin_columns');
-function rt_formation_admin_columns($columns) {
-    $new_columns = array();
-    
-    $new_columns['cb'] = $columns['cb'];
-    $new_columns['title'] = 'Titre de la formation';
-    $new_columns['formation_categorie'] = '📂 Catégorie';
-    $new_columns['formation_prix'] = '💳 Prix';
-    $new_columns['formation_duree'] = '⏳ Durée';
-    $new_columns['formation_prochaine'] = '📅 Prochaine rentrée';
-    $new_columns['date'] = $columns['date'];
-    
-    return $new_columns;
-}
-
-// Remplir les colonnes avec les données
-add_action('manage_rt-project_posts_custom_column', 'rt_formation_admin_column_data', 10, 2);
-function rt_formation_admin_column_data($column, $post_id) {
-    switch($column) {
-        case 'formation_categorie':
-            $categorie = get_post_meta($post_id, '_rt_formation_categorie', true);
-            echo $categorie ? esc_html($categorie) : '—';
-            break;
-            
-        case 'formation_prix':
-            $prix = get_post_meta($post_id, '_rt_formation_prix', true);
-            echo $prix ? '<strong>' . esc_html($prix) . '</strong>' : '—';
-            break;
-            
-        case 'formation_duree':
-            $duree = get_post_meta($post_id, '_rt_formation_duree', true);
-            echo $duree ? esc_html($duree) : '—';
-            break;
-            
-        case 'formation_prochaine':
-            $prochaine = get_post_meta($post_id, '_rt_formation_prochaine_rentree', true);
-            echo $prochaine ? '<span style="color: #d63638; font-weight: bold;">' . esc_html($prochaine) . '</span>' : '—';
-            break;
-    }
-}
-
-// Rendre certaines colonnes triables
-add_filter('manage_edit-rt-project_sortable_columns', 'rt_formation_sortable_columns');
-function rt_formation_sortable_columns($columns) {
-    $columns['formation_prix'] = 'formation_prix';
-    return $columns;
-}
-
-
 // Shortcode pour afficher une fiche formation complète
 add_shortcode('fiche_formation', 'rt_fiche_formation_shortcode');
 function rt_fiche_formation_shortcode($atts) {
