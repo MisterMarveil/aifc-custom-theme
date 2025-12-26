@@ -51,6 +51,81 @@ function rt_rename_project_to_formation() {
     }
 }
 
+// Solution générique qui filtre tout le contenu HTML
+add_filter('the_content', 'rt_replace_breadcrumb_texts', 1);
+add_filter('wp_nav_menu_items', 'rt_replace_breadcrumb_texts', 10, 2);
+add_filter('wp_title', 'rt_replace_breadcrumb_texts');
+function rt_replace_breadcrumb_texts($content) {
+    // Remplacer tous les textes liés à "Project"
+    $replacements = array(
+        'Projects' => 'Formations',
+        'projects' => 'formations',
+        'Project' => 'Formation',
+        'project' => 'formation',
+        'rt-project' => 'formation',
+        'rt-projects' => 'formations',
+    );
+    
+    foreach ($replacements as $search => $replace) {
+        // Dans le contenu HTML
+        $content = str_replace($search, $replace, $content);
+        // Dans les attributs
+        $content = str_replace(
+            htmlspecialchars($search), 
+            htmlspecialchars($replace), 
+            $content
+        );
+    }
+    
+    return $content;
+}
+
+// Solution plus ciblée pour les breadcrumbs
+add_action('wp_footer', 'rt_replace_breadcrumb_js');
+function rt_replace_breadcrumb_js() {
+    ?>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Cibler les breadcrumbs spécifiquement
+        const breadcrumbContainers = [
+            '.breadcrumb-area'           
+        ];
+        
+        breadcrumbContainers.forEach(selector => {
+            const elements = document.querySelectorAll(selector);
+            elements.forEach(element => {
+                // Remplacer les textes
+                element.innerHTML = element.innerHTML
+                    .replace(/Projects/g, 'Formations')
+                    .replace(/projects/g, 'formations')
+                    .replace(/Project/g, 'Formation')
+                    .replace(/project/g, 'formation')
+                    .replace(/rt-project/g, 'formation')
+                    .replace(/rt-projects/g, 'formations');
+                
+                // Remplacer dans les title attributes
+                if (element.title) {
+                    element.title = element.title
+                        .replace(/Projects/g, 'Formations')
+                        .replace(/Project/g, 'Formation');
+                }
+            });
+        });
+        
+        // Remplacer aussi dans les aria-current
+        const ariaElements = document.querySelectorAll('[aria-current="page"]');
+        ariaElements.forEach(element => {
+            if (element.textContent.includes('Project') || element.textContent.includes('project')) {
+                element.textContent = element.textContent
+                    .replace(/Project/g, 'Formation')
+                    .replace(/project/g, 'formation');
+            }
+        });
+    });
+    </script>
+    <?php
+}
+
 // Ajouter la méta box détaillée pour les formations
 add_action('add_meta_boxes', 'rt_formation_detailed_meta_boxes');
 function rt_formation_detailed_meta_boxes() {
