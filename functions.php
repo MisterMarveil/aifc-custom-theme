@@ -1031,10 +1031,10 @@ function rt_widget_formation_styles() {
             }
             
             .formation-widget-header {
-                background: linear-gradient(135deg, #2c3e50, #34495e);
+                background: linear-gradient(135deg, #028140, #085247);
                 color: white;
                 padding: 20px;
-                border-bottom: 3px solid #3498db;
+                border-bottom: 3px solid #028140;
             }
             
             .formation-widget-title {
@@ -1043,10 +1043,13 @@ function rt_widget_formation_styles() {
                 display: flex;
                 align-items: center;
                 gap: 10px;
+                color: white;
+                font-size: 0.85em;
+                font-weight: unset;
             }
             
             .formation-widget-title .icon-rt-book {
-                color: #3498db;
+                color: #028140;
                 font-size: 1.2em;
             }
             
