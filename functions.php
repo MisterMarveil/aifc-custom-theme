@@ -551,6 +551,280 @@ function rt_get_formation_data($post_id = null) {
     );
 }
 
+/**
+ * Widget d'information de formation avec shortcode
+ */
+add_shortcode('widget_info_formation', 'rt_widget_info_formation_shortcode');
+function rt_widget_info_formation_shortcode($atts) {
+    $atts = shortcode_atts(array(
+        'id' => get_the_ID(),
+        'show_title' => 'yes',
+        'show_actions' => 'yes',
+        'class' => ''
+    ), $atts);
+    
+    $post_id = $atts['id'];
+    $formation_data = rt_get_formation_data($post_id);
+    
+    // Si ce n'est pas une formation, on retourne rien
+    if (get_post_type($post_id) !== 'rt-project') {
+        return '';
+    }
+    
+    ob_start();
+    ?>
+    <div class="formation-info-widget <?php echo esc_attr($atts['class']); ?>">
+        <!-- Titre de la formation -->
+        <?php if ($atts['show_title'] === 'yes'): ?>
+        <div class="formation-widget-header">
+            <h3 class="formation-widget-title">
+                <i class="icon-rt-book"></i>
+                <?php echo get_the_title($post_id); ?>
+            </h3>
+        </div>
+        <?php endif; ?>
+        
+        <div class="formation-widget-content">
+            <!-- Description courte -->
+            <?php if (!empty($formation_data['description_courte'])): ?>
+            <div class="formation-widget-desc">
+                <p><?php echo esc_html(wp_trim_words($formation_data['description_courte'], 20, '...')); ?></p>
+            </div>
+            <?php endif; ?>
+            
+            <!-- Informations principales -->
+            <div class="formation-widget-infos">
+                <!-- Catégorie -->
+                <?php if (!empty($formation_data['categorie'])): ?>
+                <div class="formation-widget-info-item">
+                    <span class="info-icon">📂</span>
+                    <div class="info-content">
+                        <span class="info-label">Catégorie</span>
+                        <span class="info-value"><?php echo esc_html($formation_data['categorie']); ?></span>
+                    </div>
+                </div>
+                <?php endif; ?>
+                
+                <!-- Durée -->
+                <?php if (!empty($formation_data['duree'])): ?>
+                <div class="formation-widget-info-item">
+                    <span class="info-icon">⏳</span>
+                    <div class="info-content">
+                        <span class="info-label">Durée</span>
+                        <span class="info-value"><?php echo esc_html($formation_data['duree']); ?></span>
+                    </div>
+                </div>
+                <?php endif; ?>
+                
+                <!-- Niveau -->
+                <?php if (!empty($formation_data['niveau'])): ?>
+                <div class="formation-widget-info-item">
+                    <span class="info-icon">🎓</span>
+                    <div class="info-content">
+                        <span class="info-label">Niveau requis</span>
+                        <span class="info-value"><?php echo esc_html(wp_trim_words($formation_data['niveau'], 5, '...')); ?></span>
+                    </div>
+                </div>
+                <?php endif; ?>
+                
+                <!-- Prochaine rentrée -->
+                <?php if (!empty($formation_data['prochaine_rentree'])): ?>
+                <div class="formation-widget-info-item">
+                    <span class="info-icon">📅</span>
+                    <div class="info-content">
+                        <span class="info-label">Prochaine rentrée</span>
+                        <span class="info-value"><?php echo esc_html($formation_data['prochaine_rentree']); ?></span>
+                    </div>
+                </div>
+                <?php endif; ?>
+                
+                <!-- Prix -->
+                <?php if (!empty($formation_data['prix'])): ?>
+                <div class="formation-widget-info-item formation-price">
+                    <span class="info-icon">💳</span>
+                    <div class="info-content">
+                        <span class="info-label">Coût de la formation</span>
+                        <span class="info-value"><?php echo esc_html($formation_data['prix']); ?></span>
+                        <?php if (!empty($formation_data['paiement'])): ?>
+                        <span class="info-subtext"><?php echo esc_html($formation_data['paiement']); ?></span>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                <?php endif; ?>
+                
+                <!-- Certification -->
+                <?php if (!empty($formation_data['certification'])): ?>
+                <div class="formation-widget-info-item">
+                    <span class="info-icon">🏅</span>
+                    <div class="info-content">
+                        <span class="info-label">Certification</span>
+                        <span class="info-value"><?php echo esc_html($formation_data['certification']); ?></span>
+                    </div>
+                </div>
+                <?php endif; ?>
+            </div>
+            
+            <!-- Appels à l'action -->
+            <?php if ($atts['show_actions'] === 'yes'): ?>
+            <div class="formation-widget-actions">
+                <div class="formation-actions-header">
+                    <h4>Vous souhaitez rejoindre cette formation ?</h4>
+                </div>
+                
+                <div class="formation-actions-list">
+                    <!-- Préinscription -->
+                    <?php if (!empty($formation_data['lien_preinscription'])): ?>
+                    <a href="<?php echo esc_url($formation_data['lien_preinscription']); ?>" 
+                       class="formation-action-btn btn-preinscription" 
+                       target="_blank">
+                        <span class="action-icon">📝</span>
+                        <span class="action-text">
+                            <strong>Remplissez le formulaire de préinscription</strong>
+                            <small>Réservez votre place dès maintenant</small>
+                        </span>
+                        <span class="action-arrow">→</span>
+                    </a>
+                    <?php endif; ?>
+                    
+                    <!-- Brochure détaillée -->
+                    <a href="#contact-form-brochure" 
+                       class="formation-action-btn btn-brochure"
+                       onclick="event.preventDefault(); document.getElementById('contact-form-brochure').scrollIntoView({behavior: 'smooth'});">
+                        <span class="action-icon">📄</span>
+                        <span class="action-text">
+                            <strong>Recevez la brochure détaillée</strong>
+                            <small>Programme complet et modalités</small>
+                        </span>
+                        <span class="action-arrow">→</span>
+                    </a>
+                    
+                    <!-- Échange avec conseiller -->
+                    <a href="#contact-form-conseiller" 
+                       class="formation-action-btn btn-conseiller"
+                       onclick="event.preventDefault(); document.getElementById('contact-form-conseiller').scrollIntoView({behavior: 'smooth'});">
+                        <span class="action-icon">👨‍💼</span>
+                        <span class="action-text">
+                            <strong>Échangez avec un conseiller AIFC</strong>
+                            <small>Orientation personnalisée</small>
+                        </span>
+                        <span class="action-arrow">→</span>
+                    </a>
+                    
+                    <!-- Téléphone direct -->
+                    <a href="tel:+221338699595" class="formation-action-btn btn-phone">
+                        <span class="action-icon">📞</span>
+                        <span class="action-text">
+                            <strong>Appelez-nous directement</strong>
+                            <small>+221 33 869 95 95</small>
+                        </span>
+                        <span class="action-arrow">→</span>
+                    </a>
+                </div>
+                
+                <!-- Note importante -->
+                <div class="formation-action-note">
+                    <p><strong>⚠️ Places limitées</strong> - Les inscriptions sont ouvertes jusqu'à épuisement des places disponibles.</p>
+                </div>
+            </div>
+            <?php endif; ?>
+        </div>
+    </div>
+    <?php
+    
+    return ob_get_clean();
+}
+
+/**
+ * Formulaire de contact pour brochure (à ajouter dans la page)
+ */
+add_shortcode('formulaire_brochure', 'rt_formulaire_brochure_shortcode');
+function rt_formulaire_brochure_shortcode() {
+    ob_start();
+    ?>
+    <div id="contact-form-brochure" class="formation-contact-form">
+        <h3>Demander la brochure détaillée</h3>
+        <p>Recevez le programme complet, les modalités d'inscription et toutes les informations sur cette formation.</p>
+        
+        <?php 
+        // Vous pouvez utiliser Contact Form 7, Gravity Forms, ou un formulaire HTML simple
+        // Exemple avec Contact Form 7 :
+        if (shortcode_exists('contact-form-7')) {
+            echo do_shortcode('[contact-form-7 id="123" title="Demande de brochure"]');
+        } else {
+            // Fallback HTML
+            ?>
+            <form action="#" method="post" class="formation-brochure-form">
+                <div class="form-group">
+                    <input type="text" name="nom" placeholder="Votre nom complet" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" name="email" placeholder="Votre adresse email" required>
+                </div>
+                <div class="form-group">
+                    <input type="tel" name="telephone" placeholder="Votre numéro de téléphone">
+                </div>
+                <div class="form-group">
+                    <textarea name="message" placeholder="Votre message ou questions" rows="4"></textarea>
+                </div>
+                <input type="hidden" name="formation" value="<?php echo get_the_title(); ?>">
+                <button type="submit" class="btn-submit">Envoyer la demande</button>
+            </form>
+            <?php
+        }
+        ?>
+    </div>
+    <?php
+    return ob_get_clean();
+}
+
+/**
+ * Formulaire de contact pour conseiller
+ */
+add_shortcode('formulaire_conseiller', 'rt_formulaire_conseiller_shortcode');
+function rt_formulaire_conseiller_shortcode() {
+    ob_start();
+    ?>
+    <div id="contact-form-conseiller" class="formation-contact-form">
+        <h3>Échanger avec un conseiller AIFC</h3>
+        <p>Un conseiller vous contactera pour discuter de votre projet de formation et vous orienter.</p>
+        
+        <?php 
+        if (shortcode_exists('contact-form-7')) {
+            echo do_shortcode('[contact-form-7 id="124" title="Contact conseiller"]');
+        } else {
+            ?>
+            <form action="#" method="post" class="formation-conseiller-form">
+                <div class="form-group">
+                    <input type="text" name="nom" placeholder="Votre nom complet" required>
+                </div>
+                <div class="form-group">
+                    <input type="email" name="email" placeholder="Votre adresse email" required>
+                </div>
+                <div class="form-group">
+                    <input type="tel" name="telephone" placeholder="Votre numéro de téléphone" required>
+                </div>
+                <div class="form-group">
+                    <select name="sujet" required>
+                        <option value="">Sujet de votre demande</option>
+                        <option value="orientation">Orientation et conseil</option>
+                        <option value="financement">Financement de la formation</option>
+                        <option value="programme">Questions sur le programme</option>
+                        <option value="autre">Autre</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <textarea name="message" placeholder="Décrivez votre projet et vos questions" rows="5" required></textarea>
+                </div>
+                <input type="hidden" name="formation" value="<?php echo get_the_title(); ?>">
+                <button type="submit" class="btn-submit">Demander un échange</button>
+            </form>
+            <?php
+        }
+        ?>
+    </div>
+    <?php
+    return ob_get_clean();
+}
 
 
 // Ajouter du CSS pour les formations
@@ -731,4 +1005,277 @@ function enqueue_sticky_menu_script() {
         'offset' => 100,
         'adminBar' => true
     ));
+}
+
+
+// Ajoutez cette fonction à votre functions.php
+add_action('wp_head', 'rt_widget_formation_styles');
+function rt_widget_formation_styles() {
+    if (is_singular('rt-project')) {
+        ?>
+        <style>
+            /* Widget d'information de formation */
+            .formation-info-widget {
+                background: #ffffff;
+                border-radius: 12px;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+                border: 1px solid #eaeaea;
+                overflow: hidden;
+                margin-bottom: 30px;
+                transition: all 0.3s ease;
+            }
+            
+            .formation-info-widget:hover {
+                box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+                transform: translateY(-2px);
+            }
+            
+            .formation-widget-header {
+                background: linear-gradient(135deg, #2c3e50, #34495e);
+                color: white;
+                padding: 20px;
+                border-bottom: 3px solid #3498db;
+            }
+            
+            .formation-widget-title {
+                margin: 0;
+                font-size: 1.3em;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            
+            .formation-widget-title .icon-rt-book {
+                color: #3498db;
+                font-size: 1.2em;
+            }
+            
+            .formation-widget-content {
+                padding: 25px;
+            }
+            
+            .formation-widget-desc {
+                background: #f8f9fa;
+                padding: 15px;
+                border-radius: 8px;
+                margin-bottom: 25px;
+                border-left: 4px solid #3498db;
+                font-style: italic;
+                color: #555;
+            }
+            
+            .formation-widget-infos {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+                margin-bottom: 30px;
+            }
+            
+            .formation-widget-info-item {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                padding: 12px 15px;
+                background: #f8f9fa;
+                border-radius: 8px;
+                transition: background 0.3s;
+            }
+            
+            .formation-widget-info-item:hover {
+                background: #e9ecef;
+            }
+            
+            .formation-price {
+                background: linear-gradient(135deg, #fff5f5, #ffe6e6);
+                border: 1px solid #ffcccc;
+            }
+            
+            .info-icon {
+                font-size: 20px;
+                width: 40px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: white;
+                border-radius: 50%;
+                box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            }
+            
+            .info-content {
+                flex: 1;
+            }
+            
+            .info-label {
+                display: block;
+                font-size: 0.85em;
+                color: #7f8c8d;
+                margin-bottom: 3px;
+                font-weight: 500;
+            }
+            
+            .info-value {
+                display: block;
+                font-weight: 600;
+                color: #2c3e50;
+                font-size: 1em;
+            }
+            
+            .info-subtext {
+                display: block;
+                font-size: 0.8em;
+                color: #e74c3c;
+                margin-top: 3px;
+                font-style: italic;
+            }
+            
+            /* Section des appels à l'action */
+            .formation-widget-actions {
+                background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+                border-radius: 10px;
+                padding: 20px;
+                margin-top: 25px;
+                border: 1px solid #dee2e6;
+            }
+            
+            .formation-actions-header {
+                text-align: center;
+                margin-bottom: 20px;
+                padding-bottom: 15px;
+                border-bottom: 2px dashed #3498db;
+            }
+            
+            .formation-actions-header h4 {
+                margin: 0;
+                color: #2c3e50;
+                font-size: 1.2em;
+            }
+            
+            .formation-actions-list {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+                margin-bottom: 20px;
+            }
+            
+            .formation-action-btn {
+                display: flex;
+                align-items: center;
+                gap: 15px;
+                padding: 15px;
+                background: white;
+                border-radius: 8px;
+                text-decoration: none;
+                color: inherit;
+                border: 2px solid transparent;
+                transition: all 0.3s;
+                position: relative;
+            }
+            
+            .formation-action-btn:hover {
+                transform: translateX(5px);
+                border-color: #3498db;
+            }
+            
+            .btn-preinscription:hover {
+                background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+                border-color: #2196f3;
+            }
+            
+            .btn-brochure:hover {
+                background: linear-gradient(135deg, #f3e5f5, #e1bee7);
+                border-color: #9c27b0;
+            }
+            
+            .btn-conseiller:hover {
+                background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+                border-color: #4caf50;
+            }
+            
+            .btn-phone:hover {
+                background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+                border-color: #ff9800;
+            }
+            
+            .action-icon {
+                font-size: 24px;
+                width: 50px;
+                height: 50px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                background: #f8f9fa;
+                border-radius: 50%;
+            }
+            
+            .action-text {
+                flex: 1;
+            }
+            
+            .action-text strong {
+                display: block;
+                color: #2c3e50;
+                font-size: 1em;
+                margin-bottom: 3px;
+            }
+            
+            .action-text small {
+                display: block;
+                color: #7f8c8d;
+                font-size: 0.85em;
+            }
+            
+            .action-arrow {
+                color: #3498db;
+                font-size: 1.5em;
+                font-weight: bold;
+                opacity: 0;
+                transition: opacity 0.3s;
+            }
+            
+            .formation-action-btn:hover .action-arrow {
+                opacity: 1;
+            }
+            
+            .formation-action-note {
+                background: #fff3cd;
+                border: 1px solid #ffeaa7;
+                border-radius: 6px;
+                padding: 12px 15px;
+                text-align: center;
+            }
+            
+            .formation-action-note p {
+                margin: 0;
+                color: #856404;
+                font-size: 0.9em;
+            }
+            
+            .formation-action-note strong {
+                color: #d63031;
+            }
+            
+            /* Styles responsifs */
+            @media (max-width: 768px) {
+                .formation-widget-title {
+                    font-size: 1.1em;
+                }
+                
+                .formation-widget-info-item {
+                    padding: 10px;
+                }
+                
+                .formation-action-btn {
+                    padding: 12px;
+                }
+                
+                .action-icon {
+                    width: 40px;
+                    height: 40px;
+                    font-size: 20px;
+                }
+            }
+        </style>
+        <?php
+    }
 }
