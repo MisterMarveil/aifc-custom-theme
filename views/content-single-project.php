@@ -29,7 +29,7 @@ $rt_project_rating = 5- intval( $ratting );
 			<div class="project-content-info sidebar-sticky">
 				<?php 
 				// Remplacer tout le contenu existant par :
-				echo do_shortcode('[widget_info_formation]');
+				echo do_shortcode('[widget_info_formation compact="yes"]');
 				
 				// Vous pouvez ajouter d'autres widgets si nécessaire
 				// echo do_shortcode('[formulaire_brochure]');

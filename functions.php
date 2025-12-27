@@ -560,11 +560,13 @@ function rt_widget_info_formation_shortcode($atts) {
         'id' => get_the_ID(),
         'show_title' => 'yes',
         'show_actions' => 'yes',
-        'class' => ''
+        'class' => '',
+        'compact' => 'yes'
     ), $atts);
     
     $post_id = $atts['id'];
     $formation_data = rt_get_formation_data($post_id);
+    $isCompact = $atts['compact'] === 'yes';
     
     // Si ce n'est pas une formation, on retourne rien
     if (get_post_type($post_id) !== 'rt-project') {
@@ -589,13 +591,61 @@ function rt_widget_info_formation_shortcode($atts) {
             <?php if (!empty($formation_data['description_courte'])): ?>
             <div class="formation-widget-desc">
                 <p><?php echo esc_html(wp_trim_words($formation_data['description_courte'], 20, '...')); ?></p>
+                <?php if ($isCompact): ?>
+                    <?php if (!empty($formation_data['certification'])): ?>
+                        <p class="no-margin">  
+                            <span class="compact-info-icon">🏅</span>                  
+                            <span class="info-tag info-certif">
+                                Certification: 
+                                <strong><?php echo esc_html($formation_data['duree']); ?></strong>
+                            </span>
+                        </p>
+                    <?php endif; ?>
+                    <?php if (!empty($formation_data['niveau'])): ?>
+                        <p class="no-margin">  
+                            <span class="compact-info-icon">🎓</span>
+                            <span class="info-tag info-niveau">
+                                Niveau Requis: 
+                                <strong><?php echo esc_html($formation_data['niveau']); ?></strong>
+                            </span>
+                        </p>
+                    <?php endif; ?>
+                    <?php if (!empty($formation_data['duree'])): ?>
+                        <p class="no-margin">  
+                            <span class="compact-info-icon">⏳</span>
+                            <span class="info-tag info-duree">
+                                Durée: 
+                                <strong><?php echo esc_html($formation_data['duree']); ?></strong>
+                            </span>
+                        </p>
+                    <?php endif; ?>
+                    <?php if (!empty($formation_data['prix'])): ?>
+                        <p class="no-margin">  
+                            <span class="compact-info-icon">⏳</span>
+                            <span class="info-tag info-prix">
+                                Coût: 
+                                <strong><?php echo esc_html($formation_data['prix']); ?></strong>                                
+                            </span>
+                        </p>
+                    <?php endif; ?>                    
+                    <?php if (!empty($formation_data['prochaine_rentree'])): ?>
+                        <p class="no-margin">  
+                            <span class="compact-info-icon">📅</span>
+                            <span class="info-tag info-prochaine-rentree">
+                                Prochaine Rentrée: 
+                                <strong><?php echo esc_html($formation_data['prochaine_rentree']); ?></strong>  
+                            </span>
+                        </p>
+                    <?php endif; ?>                    
+                </p>
+                <?php endif; ?>
             </div>
             <?php endif; ?>
             
             <!-- Informations principales -->
             <div class="formation-widget-infos">
                 <!-- Catégorie -->
-                <?php if (!empty($formation_data['categorie'])): ?>
+                <?php if (!empty($formation_data['categorie']) && !$isCompact): ?>
                 <div class="formation-widget-info-item">
                     <span class="info-icon">📂</span>
                     <div class="info-content">
@@ -606,7 +656,7 @@ function rt_widget_info_formation_shortcode($atts) {
                 <?php endif; ?>
                 
                 <!-- Durée -->
-                <?php if (!empty($formation_data['duree'])): ?>
+                <?php if (!empty($formation_data['duree']) && !$isCompact): ?>
                 <div class="formation-widget-info-item">
                     <span class="info-icon">⏳</span>
                     <div class="info-content">
@@ -617,7 +667,7 @@ function rt_widget_info_formation_shortcode($atts) {
                 <?php endif; ?>
                 
                 <!-- Niveau -->
-                <?php if (!empty($formation_data['niveau'])): ?>
+                <?php if (!empty($formation_data['niveau']) && !$isCompact): ?>
                 <div class="formation-widget-info-item">
                     <span class="info-icon">🎓</span>
                     <div class="info-content">
@@ -628,7 +678,7 @@ function rt_widget_info_formation_shortcode($atts) {
                 <?php endif; ?>
                 
                 <!-- Prochaine rentrée -->
-                <?php if (!empty($formation_data['prochaine_rentree'])): ?>
+                <?php if (!empty($formation_data['prochaine_rentree']) && !$isCompact): ?>
                 <div class="formation-widget-info-item">
                     <span class="info-icon">📅</span>
                     <div class="info-content">
@@ -639,7 +689,7 @@ function rt_widget_info_formation_shortcode($atts) {
                 <?php endif; ?>
                 
                 <!-- Prix -->
-                <?php if (!empty($formation_data['prix'])): ?>
+                <?php if (!empty($formation_data['prix']) && !$isCompact): ?>
                 <div class="formation-widget-info-item formation-price">
                     <span class="info-icon">💳</span>
                     <div class="info-content">
@@ -653,7 +703,7 @@ function rt_widget_info_formation_shortcode($atts) {
                 <?php endif; ?>
                 
                 <!-- Certification -->
-                <?php if (!empty($formation_data['certification'])): ?>
+                <?php if (!empty($formation_data['certification']) && !$isCompact): ?>
                 <div class="formation-widget-info-item">
                     <span class="info-icon">🏅</span>
                     <div class="info-content">
@@ -1257,6 +1307,16 @@ function rt_widget_formation_styles() {
             
             .formation-action-note strong {
                 color: #d63031;
+            }
+
+            .no-margin {
+               margin: 0;
+            }
+
+            .compact-info-icon {
+                background: white;
+                padding: 3px;
+                font-style: normal;
             }
             
             /* Styles responsifs */

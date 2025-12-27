@@ -76,3 +76,8 @@ License URI:  	https://themeforest.net/licenses/terms/regular
 .sticky-placeholder {
     visibility: hidden;
 }
+
+h1, h2 {
+  text-transform: uppercase;
+  margin-top: 1.5em;
+}
