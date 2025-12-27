@@ -1060,11 +1060,12 @@ function rt_widget_formation_styles() {
             .formation-widget-desc {
                 background: #f8f9fa;
                 padding: 15px;
-                border-radius: 8px;
+                border-radius: 15px;
                 margin-bottom: 25px;
-                border-left: 4px solid #3498db;
+                border-left: 5px #028140 solid;
                 font-style: italic;
                 color: #555;
+                font-size: medium;
             }
             
             .formation-widget-infos {
