@@ -597,7 +597,7 @@ function rt_widget_info_formation_shortcode($atts) {
                             <span class="compact-info-icon">🏅</span>                  
                             <span class="info-tag info-certif">
                                 Certification: 
-                                <strong><?php echo esc_html($formation_data['duree']); ?></strong>
+                                <strong><?php echo esc_html($formation_data['certification']); ?></strong>
                             </span>
                         </p>
                     <?php endif; ?>
@@ -621,7 +621,7 @@ function rt_widget_info_formation_shortcode($atts) {
                     <?php endif; ?>
                     <?php if (!empty($formation_data['prix'])): ?>
                         <p class="no-margin">  
-                            <span class="compact-info-icon">⏳</span>
+                            <span class="compact-info-icon">💳</span>
                             <span class="info-tag info-prix">
                                 Coût: 
                                 <strong><?php echo esc_html($formation_data['prix']); ?></strong>                                
@@ -1111,7 +1111,7 @@ function rt_widget_formation_styles() {
                 background: #f8f9fa;
                 padding: 15px;
                 border-radius: 15px;
-                margin-bottom: 25px;
+                margin-bottom: 0px;
                 border-left: 5px #028140 solid;
                 font-style: italic;
                 color: #555;
@@ -1188,7 +1188,7 @@ function rt_widget_formation_styles() {
                 background: linear-gradient(135deg, #f8f9fa, #e9ecef);
                 border-radius: 10px;
                 padding: 20px;
-                margin-top: 25px;
+                margin-top: 10px;
                 border: 1px solid #dee2e6;
             }
             
@@ -1196,12 +1196,12 @@ function rt_widget_formation_styles() {
                 text-align: center;
                 margin-bottom: 20px;
                 padding-bottom: 15px;
-                border-bottom: 2px dashed #3498db;
+                border-bottom: 2px dashed #028140;
             }
             
             .formation-actions-header h4 {
                 margin: 0;
-                color: #2c3e50;
+                color: #085247;
                 font-size: 1.2em;
             }
             
@@ -1228,12 +1228,12 @@ function rt_widget_formation_styles() {
             
             .formation-action-btn:hover {
                 transform: translateX(5px);
-                border-color: #3498db;
+                border-color: #085247;
             }
             
             .btn-preinscription:hover {
                 background: linear-gradient(135deg, #e3f2fd, #bbdefb);
-                border-color: #2196f3;
+                border-color: #3dad58;
             }
             
             .btn-brochure:hover {
