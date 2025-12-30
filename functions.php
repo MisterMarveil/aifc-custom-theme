@@ -1227,32 +1227,27 @@ function rt_widget_formation_styles() {
             }
             
             .formation-action-btn:hover {
-                background: linear-gradient(135deg, #fff3e0, #ffe0b2);
                 border-color: #3dad58;
                 color: #085247;
             }
             
             .btn-preinscription:hover {
-                background: linear-gradient(135deg, #fff3e0, #ffe0b2);
                 border-color: #3dad58;
                 color: #085247;
             }
             
             .btn-brochure:hover {
-                background: linear-gradient(135deg, #fff3e0, #ffe0b2);
                 border-color: #3dad58;
                 color: #085247;
             }
             
             .btn-conseiller:hover {
-                background: linear-gradient(135deg, #fff3e0, #ffe0b2);
                 border-color: #3dad58;
                 color: #085247;
             }
             
             .btn-phone:hover {
-                background: linear-gradient(135deg, #fff3e0, #ffe0b2);
-                border-color: #3dad58;
+                 border-color: #3dad58;
                 color: #085247;
             }
             
