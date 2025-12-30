@@ -98,3 +98,21 @@ h1, h2 {
 .gsection_title {
   font-weight: 500;
 }
+
+/* SweetAlert2: rendre le contenu bien lisible */
+.swal2-popup .formation-contact-form {
+  text-align: left;
+}
+
+.swal2-popup .formation-contact-form h3 {
+  margin-top: 0;
+  color: #085247;
+}
+
+.swal2-popup .formation-contact-form input,
+.swal2-popup .formation-contact-form textarea,
+.swal2-popup .formation-contact-form select {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
