@@ -749,10 +749,9 @@ function rt_widget_info_formation_shortcode($atts) {
                     </a>
                     
                     <!-- Échange avec conseiller -->
-                    <a href="#contact-form-conseiller" 
-                       class="formation-action-btn btn-conseiller"
-                       onclick="event.preventDefault(); document.getElementById('contact-form-conseiller').scrollIntoView({behavior: 'smooth'});">
-                        <span class="action-icon">👨‍💼</span>
+                    <a id="contact-form-conseiller" href="#" 
+                       class="formation-action-btn btn-conseiller">
+                       <span class="action-icon">👨‍💼</span>
                         <span class="action-text">
                             <strong>Échangez avec un conseiller AIFC</strong>
                             <small>Orientation personnalisée</small>
