@@ -1153,7 +1153,7 @@ function rt_widget_formation_styles() {
                 border-radius: 15px;
                 margin-bottom: 0px;
                 border-left: 5px #028140 solid;
-                font-style: italic;
+                font-style: normal;
                 color: #555;
                 font-size: medium;
             }
