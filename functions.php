@@ -759,16 +759,6 @@ function rt_widget_info_formation_shortcode($atts) {
                         </span>
                         <span class="action-arrow">→</span>
                     </a>
-                    
-                    <!-- Téléphone direct -->
-                    <a href="tel:+221338699595" class="formation-action-btn btn-phone">
-                        <span class="action-icon">📞</span>
-                        <span class="action-text">
-                            <strong>Appelez-nous directement</strong>
-                            <small>+221 33 869 95 95</small>
-                        </span>
-                        <span class="action-arrow">→</span>
-                    </a>
                 </div>
                 
                 <!-- Note importante -->
@@ -779,6 +769,14 @@ function rt_widget_info_formation_shortcode($atts) {
             <?php endif; ?>
         </div>
     </div>
+    <script>
+    jQuery(document).ready(function($){
+        $('#contact-form-conseiller').on('click', function(e){
+            e.preventDefault();
+            $('#ht-ctc-chat').trigger('click');
+        });
+    });
+    </script>
     <?php
     
     return ob_get_clean();
