@@ -1208,6 +1208,8 @@ function rt_widget_formation_styles() {
                 flex-direction: column;
                 gap: 12px;
                 margin-bottom: 20px;
+                max-height: 200px;
+                overflow: scroll;
             }
             
             .formation-action-btn {
