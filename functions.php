@@ -1273,22 +1273,10 @@ function rt_widget_formation_styles() {
                 margin-bottom: 3px;
             }
             
-            .action-text strong:hover {
-                display: block;
-                color: #085247;
-                font-size: 1em;
-                margin-bottom: 0px;
-            }
-            
             .action-text small {
                 display: block;
                 color: #7f8c8d;
                 font-size: 0.85em;
-            }
-           
-            .action-text small:hover {
-                color: #085247;
-                font-weight: 500;
             }
             
             .action-arrow {
@@ -1301,6 +1289,12 @@ function rt_widget_formation_styles() {
             
             .formation-action-btn:hover .action-arrow {
                 opacity: 1;
+            }
+           
+            .formation-action-btn:hover .action-text strong,
+            .formation-action-btn:hover .action-text small {
+                color: #085247;
+                font-weight: bolder;
             }
             
             .formation-action-note {
