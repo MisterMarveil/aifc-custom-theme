@@ -1287,7 +1287,8 @@ function rt_widget_formation_styles() {
             }
            
             .action-text small:hover {
-                display: none;
+                color: #085247;
+                font-weight: 500;
             }
             
             .action-arrow {
