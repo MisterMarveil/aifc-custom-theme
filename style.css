@@ -94,3 +94,7 @@ h1, h2 {
 .gform_wrapper .gf_progressbar_title {
     color: #085247 !important;
 }
+
+.gsection_title {
+  font-weight: 500;
+}
