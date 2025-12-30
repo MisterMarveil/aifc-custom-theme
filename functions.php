@@ -1328,6 +1328,12 @@ function rt_widget_formation_styles() {
                 padding: 3px;
                 font-style: normal;
             }
+
+            .wp-block-accordion-heading__toggle-title {
+                flex: 1;
+                max-width: 600px;
+                background: #efefef;
+            }
             
             /* Styles responsifs */
             @media (max-width: 768px) {
