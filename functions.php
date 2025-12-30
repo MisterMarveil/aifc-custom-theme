@@ -380,6 +380,25 @@ function rt_formation_admin_column_data($column, $post_id) {
     }
 }
 
+function aifc_register_formation_mode_taxonomy() {
+    register_taxonomy(
+        'formation_mode',
+        'rt-project',
+        array(
+            'label'             => 'Mode de formation',
+            'public'            => true,
+            'hierarchical'      => false,
+            'show_ui'           => true,
+            'show_admin_column' => true,
+            'show_in_rest'      => true,
+            'rewrite'           => false,
+        )
+    );
+
+}
+add_action('init', 'aifc_register_formation_mode_taxonomy');
+
+
 // Rendre certaines colonnes triables
 add_filter('manage_edit-rt-project_sortable_columns', 'rt_formation_sortable_columns');
 function rt_formation_sortable_columns($columns) {
@@ -577,8 +596,21 @@ function rt_widget_info_formation_shortcode($atts) {
     ?>
     <div class="formation-info-widget <?php echo esc_attr($atts['class']); ?>">
         <!-- Titre de la formation -->
-        <?php if ($atts['show_title'] === 'yes'): ?>
+        <?php 
+            if ($atts['show_title'] === 'yes'): 
+            $modes = get_the_terms($post->ID, 'formation_mode');
+
+            ?>
         <div class="formation-widget-header">
+            <?php if (!empty($modes) && !is_wp_error($modes)): ?>
+                <div class="aifc-formation-modes">
+                    <?php foreach ($modes as $mode): ?>
+                        <span class="aifc-mode-tab">
+                            <?php echo esc_html($mode->name); ?>
+                        </span>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
             <h3 class="formation-widget-title">
                 <i class="icon-rt-book"></i>
                 <?php echo get_the_title($post_id); ?>
@@ -1355,6 +1387,24 @@ function rt_widget_formation_styles() {
                padding-top: 70px;
                 padding-bottom: 70px;
             }
+
+            .aifc-formation-modes {
+                display: flex;
+                gap: 8px;
+                margin-bottom: 10px;
+                position: relative;
+            }
+
+            .aifc-mode-tab {
+                background: #085247;
+                color: #ffffff;
+                font-size: 12px;
+                font-weight: 500;
+                padding: 4px 10px;
+                border-radius: 4px;
+                white-space: nowrap;
+            }
+
             
             /* Styles responsifs */
             @media (max-width: 768px) {
@@ -1375,6 +1425,8 @@ function rt_widget_formation_styles() {
                     height: 40px;
                     font-size: 20px;
                 }
+
+
             }
         </style>
         <?php
