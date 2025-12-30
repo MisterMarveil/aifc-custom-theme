@@ -1300,21 +1300,21 @@ function rt_widget_formation_styles() {
             }
             
             .formation-action-note {
-                background: #fff3cd;
-                border: 1px solid #ffeaa7;
+                background: #e7fde7;
+                border: 1px solid #e7fde7;
                 border-radius: 6px;
                 padding: 12px 15px;
-                text-align: center;
+                text-align: center;            
             }
             
             .formation-action-note p {
                 margin: 0;
-                color: #856404;
+                color: #085247;
                 font-size: 0.9em;
             }
             
             .formation-action-note strong {
-                color: #d63031;
+                color: #856404;
             }
 
             .no-margin {
