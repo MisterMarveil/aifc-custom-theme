@@ -1290,11 +1290,15 @@ function rt_widget_formation_styles() {
             .formation-action-btn:hover .action-arrow {
                 opacity: 1;
             }
+
+            .formation-action-btn:hover{
+                 background-color: #e7fde7;
+            }
            
             .formation-action-btn:hover .action-text strong,
             .formation-action-btn:hover .action-text small {
                 color: #085247;
-                font-weight: bolder;
+                font-weight: bolder;               
             }
             
             .formation-action-note {
