@@ -1332,6 +1332,7 @@ function rt_widget_formation_styles() {
             .wp-block-accordion-heading__toggle-title {
                 flex: 1;
                 max-width: 600px;
+                background-color: #efefef;
             }
 
             .wp-block-accordion h3 {
