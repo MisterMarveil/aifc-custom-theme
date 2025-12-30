@@ -143,7 +143,7 @@ function rt_formation_meta_box_callback($post) {
     wp_nonce_field('rt_formation_save_meta', 'rt_formation_meta_nonce');
     
     // Récupérer les valeurs existantes
-    $formation_categorie = get_post_meta($post->ID, '_rt_formation_categorie', true);
+   /* $formation_categorie = get_post_meta($post->ID, '_rt_formation_categorie', true);*/
     $formation_duree = get_post_meta($post->ID, '_rt_formation_duree', true);
     $formation_niveau = get_post_meta($post->ID, '_rt_formation_niveau', true);
     $formation_public = get_post_meta($post->ID, '_rt_formation_public', true);
@@ -202,11 +202,11 @@ function rt_formation_meta_box_callback($post) {
         </div>
         
         <!-- Catégorie détaillée -->
-        <div class="formation-field">
+        <!--div class="formation-field">
             <label for="rt_formation_categorie">📂 Catégorie détaillée</label>
             <input type="text" id="rt_formation_categorie" name="rt_formation_categorie" 
-                   value="<?php echo esc_attr($formation_categorie); ?>" placeholder="Ex: Formations Standards — Islamic Finance">
-        </div>
+                   value="<?php /*echo esc_attr($formation_categorie);*/ ?>" placeholder="Ex: Formations Standards — Islamic Finance">
+        </div-->
         
         <!-- Durée -->
         <div class="formation-field">
@@ -312,7 +312,7 @@ function rt_formation_save_meta_box_data($post_id) {
     
     $fields = array(
         'rt_formation_description_courte',
-        'rt_formation_categorie',
+        //'rt_formation_categorie',
         'rt_formation_duree',
         'rt_formation_niveau',
         'rt_formation_public',
@@ -345,7 +345,7 @@ function rt_formation_admin_columns($columns) {
     
     $new_columns['cb'] = $columns['cb'];
     $new_columns['title'] = 'Titre de la formation';
-    $new_columns['formation_categorie'] = '📂 Catégorie';
+    /*$new_columns['formation_categorie'] = '📂 Catégorie';*/
     $new_columns['formation_prix'] = '💳 Prix';
     $new_columns['formation_duree'] = '⏳ Durée';
     $new_columns['formation_prochaine'] = '📅 Prochaine rentrée';
@@ -358,10 +358,10 @@ function rt_formation_admin_columns($columns) {
 add_action('manage_rt-project_posts_custom_column', 'rt_formation_admin_column_data', 10, 2);
 function rt_formation_admin_column_data($column, $post_id) {
     switch($column) {
-        case 'formation_categorie':
+        /*case 'formation_categorie':
             $categorie = get_post_meta($post_id, '_rt_formation_categorie', true);
             echo $categorie ? esc_html($categorie) : '—';
-            break;
+            break;*/
             
         case 'formation_prix':
             $prix = get_post_meta($post_id, '_rt_formation_prix', true);
@@ -556,7 +556,7 @@ function rt_get_formation_data($post_id = null) {
     
     return array(
         'description_courte' => get_post_meta($post_id, '_rt_formation_description_courte', true),
-        'categorie' => get_post_meta($post_id, '_rt_formation_categorie', true),
+        /*'categorie' => get_post_meta($post_id, '_rt_formation_categorie', true),*/
         'duree' => get_post_meta($post_id, '_rt_formation_duree', true),
         'modules' => get_post_meta($post_id, '_rt_formation_modules', true),
         'niveau' => get_post_meta($post_id, '_rt_formation_niveau', true),
