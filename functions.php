@@ -844,15 +844,19 @@ function rt_formulaire_brochure_shortcode() {
             ?>
             <form action="#" method="post" class="formation-brochure-form">
                 <div class="form-group">
+                    <label class="label-name">Nom:</label>
                     <input type="text" name="nom" placeholder="Votre nom complet" required>
                 </div>
                 <div class="form-group">
-                    <input type="email" name="email" placeholder="Votre adresse email" required>
+                    <label class="label-mail">Email:</label>
+                    <input type="email" namNome="email" placeholder="Votre adresse email" required>
                 </div>
                 <div class="form-group">
+                    <label class="label-phone">Téléphone:</label>
                     <input type="tel" name="telephone" placeholder="Votre numéro de téléphone">
                 </div>
                 <div class="form-group">
+                    <label class="label-name">Message:</label>
                     <textarea name="message" placeholder="Votre message ou questions" rows="4"></textarea>
                 </div>
                 <input type="hidden" name="formation" value="<?php echo get_the_title(); ?>">
