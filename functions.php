@@ -770,10 +770,21 @@ function rt_widget_info_formation_shortcode($atts) {
         </div>
     </div>
     <script>
-    jQuery(document).ready(function($){
-        $('#contact-form-conseiller').on('click', function(e){
+    document.addEventListener('DOMContentLoaded', function () {
+        const btn = document.getElementById('contact-form-conseiller');
+
+        if (!btn) return;
+
+        btn.addEventListener('click', function (e) {
             e.preventDefault();
-            $('#ht-ctc-chat').trigger('click');
+
+            const phone = '237667559009'; // numéro AIFC
+            const message = encodeURIComponent(
+                "Bonjour AIFC, je souhaite échanger avec un conseiller concernant une formation."
+            );
+
+            const whatsappUrl = `https://wa.me/${phone}?text=${message}`;
+            window.open(whatsappUrl, '_blank');
         });
     });
     </script>
