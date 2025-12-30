@@ -1227,28 +1227,33 @@ function rt_widget_formation_styles() {
             }
             
             .formation-action-btn:hover {
-                transform: translateX(5px);
-                border-color: #085247;
+                background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+                border-color: #3dad58;
+                color: #085247;
             }
             
             .btn-preinscription:hover {
-                background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+                background: linear-gradient(135deg, #fff3e0, #ffe0b2);
                 border-color: #3dad58;
+                color: #085247;
             }
             
             .btn-brochure:hover {
-                background: linear-gradient(135deg, #f3e5f5, #e1bee7);
-                border-color: #3dad58;;
+                background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+                border-color: #3dad58;
+                color: #085247;
             }
             
             .btn-conseiller:hover {
-                background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
-                border-color: #4caf50;
+                background: linear-gradient(135deg, #fff3e0, #ffe0b2);
+                border-color: #3dad58;
+                color: #085247;
             }
             
             .btn-phone:hover {
                 background: linear-gradient(135deg, #fff3e0, #ffe0b2);
                 border-color: #3dad58;
+                color: #085247;
             }
             
             .action-icon {
@@ -1273,14 +1278,25 @@ function rt_widget_formation_styles() {
                 margin-bottom: 3px;
             }
             
+            .action-text strong:hover {
+                display: block;
+                color: #085247;
+                font-size: 1em;
+                margin-bottom: 0px;
+            }
+            
             .action-text small {
                 display: block;
                 color: #7f8c8d;
                 font-size: 0.85em;
             }
+           
+            .action-text small:hover {
+                display: none;
+            }
             
             .action-arrow {
-                color: #3498db;
+                color: #085247;
                 font-size: 1.5em;
                 font-weight: bold;
                 opacity: 0;
