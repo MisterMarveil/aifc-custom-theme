@@ -611,9 +611,6 @@ function rt_widget_info_formation_shortcode($atts) {
                     <?php endforeach; ?>
                 </div>
             <?php endif; ?>
-            <span class="aifc-mode-tab">
-                <?php echo "moving"; ?>
-            </span>
             <h3 class="formation-widget-title">
                 <i class="icon-rt-book"></i>
                 <?php echo get_the_title($post_id); ?>
