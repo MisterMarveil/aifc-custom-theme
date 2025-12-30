@@ -1334,6 +1334,11 @@ function rt_widget_formation_styles() {
                 max-width: 600px;
                 background: #efefef;
             }
+
+            .content-area{
+               padding-top: 70px;
+                padding-bottom: 70px;
+            }
             
             /* Styles responsifs */
             @media (max-width: 768px) {
