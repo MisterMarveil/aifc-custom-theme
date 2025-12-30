@@ -90,3 +90,7 @@ h1, h2 {
 .percentbar_blue {
     background-color: #028140 !important;
 }
+
+.gform_wrapper .gf_progressbar_title {
+    color: #085247 !important;
+}
