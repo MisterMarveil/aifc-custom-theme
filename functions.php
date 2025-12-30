@@ -1405,10 +1405,6 @@ function rt_widget_formation_styles() {
                 white-space: nowrap;
             }
 
-            .gform_wrapper .gf_progressbar_percentage, .percentbar_blue {
-               background-color: #028140 !important;
-            }
-
             
             /* Styles responsifs */
             @media (max-width: 768px) {
