@@ -1338,7 +1338,7 @@ function rt_widget_formation_styles() {
             .wp-block-accordion h3 {
                 max-width: 600px;
                 font-weight: 300;
-                margin-bottom: 20px;
+                /*margin-bottom: 20px;*/
             }
 
             .content-area{
