@@ -117,3 +117,6 @@ h1, h2 {
   box-sizing: border-box;
   margin-bottom: 15px;
 }
+.formation-brochure-form label{
+    margin-top: 10px;
+}
