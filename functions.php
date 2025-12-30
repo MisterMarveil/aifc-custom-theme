@@ -769,9 +769,7 @@ function rt_widget_info_formation_shortcode($atts) {
                     <?php endif; ?>
                     
                     <!-- Brochure détaillée -->
-                    <a href="#contact-form-brochure" 
-                       class="formation-action-btn btn-brochure"
-                       onclick="event.preventDefault(); document.getElementById('contact-form-brochure').scrollIntoView({behavior: 'smooth'});">
+                   <a href="#" id="open-brochure-modal" class="formation-action-btn btn-brochure">
                         <span class="action-icon">📄</span>
                         <span class="action-text">
                             <strong>Recevez la brochure détaillée</strong>
@@ -779,6 +777,7 @@ function rt_widget_info_formation_shortcode($atts) {
                         </span>
                         <span class="action-arrow">→</span>
                     </a>
+
                     
                     <!-- Échange avec conseiller -->
                     <a id="contact-form-conseiller" href="#" 
@@ -1097,8 +1096,63 @@ function enqueue_sticky_menu_script() {
     ));
 }
 
+    add_action('wp_enqueue_scripts', function () {
 
-// Ajoutez cette fonction à votre functions.php
+        // SweetAlert2 (CDN simple)
+        wp_enqueue_script(
+            'sweetalert2',
+            'https://cdn.jsdelivr.net/npm/sweetalert2@11',
+            array(),
+            null,
+            true
+        );
+
+        // Ton script d'ouverture de modal (inline)
+        $js = <<<JS
+        document.addEventListener('DOMContentLoaded', function () {
+            const openBtn = document.getElementById('open-brochure-modal');
+            if (!openBtn) return;
+
+            openBtn.addEventListener('click', function(e){
+                e.preventDefault();
+
+                const source = document.getElementById('contact-form-brochure');
+                if (!source) {
+                    console.warn('Formulaire brochure introuvable (#contact-form-brochure). Ajoute le shortcode [formulaire_brochure] sur la page.');
+                    return;
+                }
+
+                // On clone le contenu caché pour l'afficher dans SweetAlert
+                const clone = source.cloneNode(true);
+                clone.style.display = 'block'; // on le rend visible dans le modal
+                clone.id = 'contact-form-brochure-modal'; // éviter doublon d'ID
+
+                Swal.fire({
+                    title: 'Demander la brochure détaillée',
+                    html: clone,
+                    showCloseButton: true,
+                    showConfirmButton: false,
+                    width: '760px',
+                    padding: '1.2rem',
+                    focusConfirm: false,
+                    didOpen: () => {
+                        // Si Contact Form 7 est présent, on (ré)initialise le formulaire dans le contenu injecté
+                        if (window.wpcf7 && typeof window.wpcf7.init === 'function') {
+                            clone.querySelectorAll('form.wpcf7-form').forEach(function(form){
+                                window.wpcf7.init(form);
+                            });
+                        }
+                    }
+                });
+            });
+        });
+        JS;
+
+            wp_add_inline_script('sweetalert2', $js);
+        });
+
+
+
 add_action('wp_head', 'rt_widget_formation_styles');
 function rt_widget_formation_styles() {
     if (is_singular('rt-project')) {
@@ -1403,6 +1457,10 @@ function rt_widget_formation_styles() {
                 padding: 4px 10px;
                 border-radius: 4px;
                 white-space: nowrap;
+            }
+
+            #contact-form-brochure {
+               display: none;
             }
 
             
