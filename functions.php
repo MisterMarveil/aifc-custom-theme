@@ -717,9 +717,9 @@ function rt_widget_info_formation_shortcode($atts) {
             <!-- Appels à l'action -->
             <?php if ($atts['show_actions'] === 'yes'): ?>
             <div class="formation-widget-actions">
-                <div class="formation-actions-header">
+                <!--div class="formation-actions-header">
                     <h4>Vous souhaitez rejoindre cette formation ?</h4>
-                </div>
+                </div-->
                 
                 <div class="formation-actions-list">
                     <!-- Préinscription -->
@@ -729,7 +729,7 @@ function rt_widget_info_formation_shortcode($atts) {
                        target="_blank">
                         <span class="action-icon">📝</span>
                         <span class="action-text">
-                            <strong>Remplissez le formulaire de préinscription</strong>
+                            <strong>Remplir le formulaire de préinscription</strong>
                             <small>Réservez votre place dès maintenant</small>
                         </span>
                         <span class="action-arrow">→</span>
@@ -971,8 +971,8 @@ function rt_formation_custom_styles() {
             
             .btn-formation-preinscription {
                 display: inline-block;
-                background: linear-gradient(135deg, #3498db, #2980b9);
-                color: white;
+                background: linear-gradient(135deg, #f6f6f7ff, #fbfbfcff);
+                color: black;
                 padding: 15px 30px;
                 border-radius: 50px;
                 text-decoration: none;
@@ -984,9 +984,9 @@ function rt_formation_custom_styles() {
             }
             
             .btn-formation-preinscription:hover {
-                background: linear-gradient(135deg, #2980b9, #1c5a7d);
+                background: linear-gradient(135deg, #f6f6f7ff, #fbfbfcff);
                 transform: translateY(-2px);
-                box-shadow: 0 5px 15px rgba(41, 128, 185, 0.3);
+                box-shadow: 0 5px 15px #3dad58;
             }
             
             /* Pour l'archive/liste des formations */
@@ -1187,8 +1187,8 @@ function rt_widget_formation_styles() {
             .formation-widget-actions {
                 background: linear-gradient(135deg, #f8f9fa, #e9ecef);
                 border-radius: 10px;
-                padding: 20px;
-                margin-top: 10px;
+                /*padding: 20px;
+                margin-top: 10px;*/
                 border: 1px solid #dee2e6;
             }
             
@@ -1216,7 +1216,7 @@ function rt_widget_formation_styles() {
                 display: flex;
                 align-items: center;
                 gap: 15px;
-                padding: 15px;
+                /*padding: 15px;*/
                 background: white;
                 border-radius: 8px;
                 text-decoration: none;
@@ -1238,7 +1238,7 @@ function rt_widget_formation_styles() {
             
             .btn-brochure:hover {
                 background: linear-gradient(135deg, #f3e5f5, #e1bee7);
-                border-color: #9c27b0;
+                border-color: #3dad58;;
             }
             
             .btn-conseiller:hover {
@@ -1248,7 +1248,7 @@ function rt_widget_formation_styles() {
             
             .btn-phone:hover {
                 background: linear-gradient(135deg, #fff3e0, #ffe0b2);
-                border-color: #ff9800;
+                border-color: #3dad58;
             }
             
             .action-icon {
