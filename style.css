@@ -87,6 +87,6 @@ h1, h2 {
   padding-bottom: 70px;
 }
 
-.gform_wrapper .gf_progressbar_percentage, .percentbar_blue {
+.percentbar_blue {
     background-color: #028140 !important;
 }
