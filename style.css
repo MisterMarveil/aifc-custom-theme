@@ -128,3 +128,7 @@ h1, h2 {
 #ask_brochure_btn:hover{
     background-color: #028140;
 }
+
+.gf_progressbar .percentbar_blue, .gform_button{
+    background-color: #028140 !important;
+}
