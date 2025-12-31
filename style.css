@@ -131,3 +131,7 @@ div:where(.swal2-container) h2:where(.swal2-title){
 #ask_brochure_btn:hover{
     background-color: #028140;
 }
+
+.finwave-breadcrumb-wrapper .entry-title{
+    font-size: 2em;
+}
