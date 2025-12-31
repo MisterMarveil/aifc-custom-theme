@@ -30,7 +30,7 @@ $rt_project_rating = 5- intval( $ratting );
 				<?php 
 				// Remplacer tout le contenu existant par :
 				echo do_shortcode('[widget_info_formation compact="yes"]');
-				echo do_shortcode('[formulaire_brochure]');
+				//echo do_shortcode('[formulaire_brochure]');
 				
 				
 				// Vous pouvez ajouter d'autres widgets si nécessaire
