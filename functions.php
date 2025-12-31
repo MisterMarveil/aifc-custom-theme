@@ -1054,12 +1054,12 @@ function rt_formation_custom_styles() {
                 font-size: 0.8em;
                 margin-right: 5px;
                 margin-bottom: 5px;
-            }
-            div:where(.swal2-container) h2:where(.swal2-title){
-                color: #085247;
-            }
+            }           
             .finwave-breadcrumb-wrapper .entry-title{
                 font-size: 2em;
+            }
+            .custom-swal-title-class{
+                color: #085247;
             }
         </style>
         <?php
@@ -1145,6 +1145,9 @@ function enqueue_sticky_menu_script() {
                     width: '760px',
                     padding: '1.2rem',
                     focusConfirm: false,
+                    customClass: {
+                        title: 'custom-swal-title-class'
+                    },
                     didOpen: () => {
                         // Si Contact Form 7 est présent, on (ré)initialise le formulaire dans le contenu injecté
                         if (window.wpcf7 && typeof window.wpcf7.init === 'function') {
