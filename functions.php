@@ -829,7 +829,6 @@ function rt_widget_info_formation_shortcode($atts) {
 add_shortcode('formulaire_brochure', 'rt_formulaire_brochure_shortcode');
 function rt_formulaire_brochure_shortcode() {
     ob_start();
-     $id = get_the_ID();
     ?>
     <div id="contact-form-brochure" class="formation-contact-form">
         <!--h3>Demander la brochure détaillée</h3-->
