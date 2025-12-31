@@ -1126,50 +1126,60 @@ function enqueue_sticky_menu_script() {
 
         // Ton script d'ouverture de modal (inline)
         $js = <<<JS
-        document.addEventListener('DOMContentLoaded', function () {
-            const openBtn = document.getElementById('open-brochure-modal');
-            if (!openBtn) return;
+        <script>
+             document.addEventListener('DOMContentLoaded', function () {
+                function openBrochureModal() {
+                    const source = document.getElementById('contact-form-brochure');
+                    if (!source) {
+                        console.warn('Formulaire brochure introuvable (#contact-form-brochure). Ajoute le shortcode [formulaire_brochure] sur la page.');
+                        return;
+                    }
 
-            openBtn.addEventListener('click', function(e){
-                e.preventDefault();
+                    const clone = source.cloneNode(true);
+                    clone.style.display = 'block';
+                    clone.id = 'contact-form-brochure-modal';
 
-                const source = document.getElementById('contact-form-brochure');
-                if (!source) {
-                    console.warn('Formulaire brochure introuvable (#contact-form-brochure). Ajoute le shortcode [formulaire_brochure] sur la page.');
-                    return;
+                    Swal.fire({
+                        title: 'Demander la brochure détaillée',
+                        html: clone,
+                        showCloseButton: true,
+                        showConfirmButton: false,
+                        width: '760px',
+                        padding: '1.2rem',
+                        focusConfirm: false,
+                        didOpen: () => {
+                            // Réinitialisation Gravity Forms dans le modal
+                            if (window.gform && typeof window.gform.initializeOnLoaded === 'function') {
+                                window.gform.initializeOnLoaded();
+                                window.gform.initializeOnReady();
+                            }
+                        }
+                    });
+                }
+        
+
+                // 🔁 CAS 1 : clic utilisateur
+                const openBtn = document.getElementById('open-brochure-modal');
+                if (openBtn) {
+                    openBtn.addEventListener('click', function(e){
+                        e.preventDefault();
+                        openBrochureModal();
+                    });
                 }
 
-                // On clone le contenu caché pour l'afficher dans SweetAlert
-                const clone = source.cloneNode(true);
-                clone.style.display = 'block'; // on le rend visible dans le modal
-                clone.id = 'contact-form-brochure-modal'; // éviter doublon d'ID
+                // 🔁 CAS 2 : retour Gravity Forms avec ancre #gf_X
+                if (window.location.hash && window.location.hash.startsWith('#gf_')) {
+                    // Petit délai pour laisser GF reconstruire le DOM
+                    setTimeout(function(){
+                        openBrochureModal();
+                    }, 400);
+                }
 
-                Swal.fire({
-                    title: 'Demander la brochure détaillée',
-                    html: clone,
-                    showCloseButton: true,
-                    showConfirmButton: false,
-                    width: '760px',
-                    padding: '1.2rem',
-                    focusConfirm: false,
-                    customClass: {
-                        title: 'custom-swal-title-class'
-                    },
-                    didOpen: () => {
-                        // Si Contact Form 7 est présent, on (ré)initialise le formulaire dans le contenu injecté
-                        if (window.wpcf7 && typeof window.wpcf7.init === 'function') {
-                            clone.querySelectorAll('form.wpcf7-form').forEach(function(form){
-                                window.wpcf7.init(form);
-                            });
-                        }
-                    }
-                });
             });
-        });
-        JS;
+        </script>
 
-            wp_add_inline_script('sweetalert2', $js);
-        });
+        wp_add_inline_script('sweetalert2', $js);
+    });
 
 
 
