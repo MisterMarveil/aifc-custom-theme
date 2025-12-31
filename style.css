@@ -136,3 +136,40 @@ h1, h2 {
 #swal2-title{
     color:#085247;
 }
+
+:root {
+  --aifc-primary: #085247;
+  --aifc-secondary: #028140;
+  --aifc-accent: #6cb96d;
+}
+
+.aifc-section-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--aifc-primary); /* 👈 couleur pilote */
+}
+
+.aifc-section-title.secondary {
+  color: var(--aifc-secondary);
+}
+
+.aifc-section-title svg {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.aifc-icon {
+  height: 28px;
+  display: inline flex;
+  color: #028140;
+  margin-top: 5px;
+}
+
+.wp-block-accordion-heading__toggle-title {
+  flex: 1;
+  max-width: 600px;
+  background-color: #efefef;
+  color: #085247 !important;
+}
