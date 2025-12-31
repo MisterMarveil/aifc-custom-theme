@@ -1501,6 +1501,14 @@ function rt_widget_formation_styles() {
                display: none;
             }
 
+            #swal2-html-container{
+                font-family: poppins;
+            }
+
+           .gf_progressbar .percentbar_blue, .gform_button{
+            background-color: #028140 !important;
+           }
+
             
             /* Styles responsifs */
             @media (max-width: 768px) {
