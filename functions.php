@@ -833,7 +833,7 @@ function rt_formulaire_brochure_shortcode() {
     <div id="contact-form-brochure" class="formation-contact-form">
         <!--h3>Demander la brochure détaillée</h3-->
         
-        <p>Recevez le programme complet(<?php echo "".get_the_ID(); ?>), les modalités d'inscription et toutes les informations sur cette formation (un conseiller pourrait aussi prendre contact pour vous apportez des éclairages complémentaires).</p>
+        <p>Recevez le programme complet, les modalités d'inscription et toutes les informations sur cette formation (un conseiller pourrait aussi prendre contact pour vous apportez des éclairages complémentaires).</p>
         
         <?php
         if (!shortcode_exists('gravityform')) {
@@ -1113,73 +1113,74 @@ function enqueue_sticky_menu_script() {
     ));
 }
 
-    add_action('wp_enqueue_scripts', function () {
+add_action('wp_enqueue_scripts', function () {
 
-        // SweetAlert2 (CDN simple)
-        wp_enqueue_script(
-            'sweetalert2',
-            'https://cdn.jsdelivr.net/npm/sweetalert2@11',
-            array(),
-            null,
-            true
-        );
+    // SweetAlert2 (CDN simple)
+    wp_enqueue_script(
+        'sweetalert2',
+        'https://cdn.jsdelivr.net/npm/sweetalert2@11',
+        array(),
+        null,
+        true
+    );
 
-        // Ton script d'ouverture de modal (inline)
-        $js = <<<JS
-        <script>
-             document.addEventListener('DOMContentLoaded', function () {
-                function openBrochureModal() {
-                    const source = document.getElementById('contact-form-brochure');
-                    if (!source) {
-                        console.warn('Formulaire brochure introuvable (#contact-form-brochure). Ajoute le shortcode [formulaire_brochure] sur la page.');
-                        return;
-                    }
+    // Ton script d'ouverture de modal (inline)
+    $js = <<<JS
+         <script>
+            document.addEventListener('DOMContentLoaded', function () {
+            function openBrochureModal() {
+                const source = document.getElementById('contact-form-brochure');
+                if (!source) {
+                    console.warn('Formulaire brochure introuvable (#contact-form-brochure). Ajoute le shortcode [formulaire_brochure] sur la page.');
+                    return;
+                }
 
-                    const clone = source.cloneNode(true);
-                    clone.style.display = 'block';
-                    clone.id = 'contact-form-brochure-modal';
+                const clone = source.cloneNode(true);
+                clone.style.display = 'block';
+                clone.id = 'contact-form-brochure-modal';
 
-                    Swal.fire({
-                        title: 'Demander la brochure détaillée',
-                        html: clone,
-                        showCloseButton: true,
-                        showConfirmButton: false,
-                        width: '760px',
-                        padding: '1.2rem',
-                        focusConfirm: false,
-                        didOpen: () => {
-                            // Réinitialisation Gravity Forms dans le modal
-                            if (window.gform && typeof window.gform.initializeOnLoaded === 'function') {
-                                window.gform.initializeOnLoaded();
-                                window.gform.initializeOnReady();
-                            }
+                Swal.fire({
+                    title: 'Demander la brochure détaillée',
+                    html: clone,
+                    showCloseButton: true,
+                    showConfirmButton: false,
+                    width: '760px',
+                    padding: '1.2rem',
+                    focusConfirm: false,
+                    didOpen: () => {
+                        // Réinitialisation Gravity Forms dans le modal
+                        if (window.gform && typeof window.gform.initializeOnLoaded === 'function') {
+                            window.gform.initializeOnLoaded();
+                            window.gform.initializeOnReady();
                         }
-                    });
-                }
-        
+                    }
+                });
+            }
+    
 
-                // 🔁 CAS 1 : clic utilisateur
-                const openBtn = document.getElementById('open-brochure-modal');
-                if (openBtn) {
-                    openBtn.addEventListener('click', function(e){
-                        e.preventDefault();
-                        openBrochureModal();
-                    });
-                }
+            // 🔁 CAS 1 : clic utilisateur
+            const openBtn = document.getElementById('open-brochure-modal');
+            if (openBtn) {
+                openBtn.addEventListener('click', function(e){
+                    e.preventDefault();
+                    openBrochureModal();
+                });
+            }
 
-                // 🔁 CAS 2 : retour Gravity Forms avec ancre #gf_X
-                if (window.location.hash && window.location.hash.startsWith('#gf_')) {
-                    // Petit délai pour laisser GF reconstruire le DOM
-                    setTimeout(function(){
-                        openBrochureModal();
-                    }, 400);
-                }
+            // 🔁 CAS 2 : retour Gravity Forms avec ancre #gf_X
+            if (window.location.hash && window.location.hash.startsWith('#gf_')) {
+                // Petit délai pour laisser GF reconstruire le DOM
+                setTimeout(function(){
+                    openBrochureModal();
+                }, 400);
+            }
 
-            });
-        </script>
+        });
+    </script>
+    JS;
 
-        wp_add_inline_script('sweetalert2', $js);
-    });
+    wp_add_inline_script('sweetalert2', $js);
+});
 
 
 
