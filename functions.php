@@ -1055,6 +1055,12 @@ function rt_formation_custom_styles() {
                 margin-right: 5px;
                 margin-bottom: 5px;
             }
+            div:where(.swal2-container) h2:where(.swal2-title){
+                color: #085247;
+            }
+            .finwave-breadcrumb-wrapper .entry-title{
+                font-size: 2em;
+            }
         </style>
         <?php
     }
