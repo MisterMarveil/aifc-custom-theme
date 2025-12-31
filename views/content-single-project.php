@@ -21,7 +21,7 @@ $rt_project_weblink 	= get_post_meta( $id, 'rt_project_weblink', true);
 
 $ratting	 	= get_post_meta( $id, 'rt_project_rating', true );
 $rt_project_rating = 5- intval( $ratting );
-)
+
 ?>
 <div id="post-<?php the_ID();?>" <?php post_class( 'project-single' );?>>
 	<div class="project-single-item">
