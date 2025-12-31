@@ -120,3 +120,14 @@ h1, h2 {
 .formation-brochure-form label{
     margin-top: 10px;
 }
+div:where(.swal2-container) h2:where(.swal2-title){
+    color: #085247;
+}
+#ask_brochure_btn{
+    padding: 10px;
+    border-radius: 10px;
+}
+
+#ask_brochure_btn:hover{
+    color: #028140;
+}

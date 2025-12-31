@@ -831,7 +831,7 @@ function rt_formulaire_brochure_shortcode() {
     ob_start();
     ?>
     <div id="contact-form-brochure" class="formation-contact-form">
-        <h3>Demander la brochure détaillée</h3>
+        <!--h3>Demander la brochure détaillée</h3-->
         <p>Recevez le programme complet, les modalités d'inscription et toutes les informations sur cette formation.</p>
         
         <?php 
@@ -860,7 +860,7 @@ function rt_formulaire_brochure_shortcode() {
                     <textarea name="message" placeholder="Votre message ou questions" rows="4"></textarea>
                 </div>
                 <input type="hidden" name="formation" value="<?php echo get_the_title(); ?>">
-                <button type="submit" class="btn-submit">Envoyer la demande</button>
+                <button id="ask_brochure_btn" type="submit" class="btn-submit">Envoyer la demande</button>
             </form>
             <?php
         }
