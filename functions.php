@@ -833,7 +833,7 @@ function rt_formulaire_brochure_shortcode() {
     <div id="contact-form-brochure" class="formation-contact-form">
         <!--h3>Demander la brochure détaillée</h3-->
         
-        <p>Recevez le programme complet(<?php echo "".get_the_ID(); ?>), les modalités d'inscription et toutes les informations sur cette formation (un conseiller pourrait aussi prendre contact pour vous apportez des éclairages complémentaires).</p>
+        <p>Recevez le programme complet(<?php /*echo "".get_the_ID();*/ ?>), les modalités d'inscription et toutes les informations sur cette formation (un conseiller pourrait aussi prendre contact pour vous apportez des éclairages complémentaires).</p>
         
         <?php
         if (!shortcode_exists('gravityform')) {
