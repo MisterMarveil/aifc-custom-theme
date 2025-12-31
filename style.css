@@ -160,12 +160,6 @@ h1, h2 {
   flex-shrink: 0;
 }
 
-.aifc-icon {
-  height: 28px;
-  display: inline flex;
-  color: #028140;
-  margin-top: 5px;
-}
 
 .wp-block-accordion-heading__toggle-title {
   flex: 1;

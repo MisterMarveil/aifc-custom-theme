@@ -1507,8 +1507,15 @@ function rt_widget_formation_styles() {
             }
 
            .gf_progressbar .percentbar_blue, .gform_button{
-            background-color: #028140 !important;
+                background-color: #028140 !important;
            }
+
+           .aifc-icon {
+                height: 28px;
+                display: inline flex;
+                color: #028140;
+                margin-top: 5px;
+            }
 
             
             /* Styles responsifs */
