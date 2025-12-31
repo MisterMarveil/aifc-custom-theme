@@ -829,17 +829,19 @@ function rt_widget_info_formation_shortcode($atts) {
 add_shortcode('formulaire_brochure', 'rt_formulaire_brochure_shortcode');
 function rt_formulaire_brochure_shortcode() {
     ob_start();
+     $id = get_the_ID();
     ?>
     <div id="contact-form-brochure" class="formation-contact-form">
         <!--h3>Demander la brochure détaillée</h3-->
-        <p>Recevez le programme complet, les modalités d'inscription et toutes les informations sur cette formation (un conseiller pourrait aussi prendre contact pour vous apportez des éclairages complémentaires).</p>
+        
+        <p>Recevez le programme complet(<?php echo "".get_the_ID(); ?>), les modalités d'inscription et toutes les informations sur cette formation (un conseiller pourrait aussi prendre contact pour vous apportez des éclairages complémentaires).</p>
         
         <?php
         if (!shortcode_exists('gravityform')) {
             echo "Gravity Form needs to be setted -- (functions.php in finwave child)";
         }else{
-            $id = get_the_ID();
-            echo do_shortcode('[gravityform id="2" title="false" field_values="formation=$id" ]');
+           // $id = get_the_ID();
+            //echo do_shortcode('[gravityform id="2" title="false" field_values="formation=$id" ]');
         }
        /* } else {
             // Fallback HTML
