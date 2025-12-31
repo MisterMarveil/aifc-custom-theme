@@ -1467,6 +1467,7 @@ function rt_widget_formation_styles() {
                 flex: 1;
                 max-width: 600px;
                 background-color: #efefef;
+                color: #085247;
             }
 
             .wp-block-accordion h3 {
