@@ -838,7 +838,8 @@ function rt_formulaire_brochure_shortcode() {
         if (!shortcode_exists('gravityform')) {
             echo "Gravity Form needs to be setted -- (functions.php in finwave child)";
         }else{
-            echo do_shortcode('[gravityform id="2" title="true"]');
+            $id = get_the_ID();
+            echo do_shortcode('[gravityform id="2" title="false" field_values="formation=$id" ]');
         }
        /* } else {
             // Fallback HTML
