@@ -832,14 +832,15 @@ function rt_formulaire_brochure_shortcode() {
     ?>
     <div id="contact-form-brochure" class="formation-contact-form">
         <!--h3>Demander la brochure détaillée</h3-->
-        <p>Recevez le programme complet, les modalités d'inscription et toutes les informations sur cette formation.</p>
+        <p>Recevez le programme complet, les modalités d'inscription et toutes les informations sur cette formation (un conseiller pourrait aussi prendre contact pour vous apportez des éclairages complémentaires).</p>
         
-        <?php 
-        // Vous pouvez utiliser Contact Form 7, Gravity Forms, ou un formulaire HTML simple
-        // Exemple avec Contact Form 7 :
-        if (shortcode_exists('contact-form-7')) {
-            echo do_shortcode('[contact-form-7 id="123" title="Demande de brochure"]');
-        } else {
+        <?php
+        if (!shortcode_exists('gravityform')) {
+            echo "Gravity Form needs to be setted -- (functions.php in finwave child)";
+        }else{
+            echo do_shortcode('[gravityform id="2" title="true"]');
+        }
+       /* } else {
             // Fallback HTML
             ?>
             <form action="#" method="post" class="formation-brochure-form">
@@ -852,7 +853,7 @@ function rt_formulaire_brochure_shortcode() {
                     <input type="email" namNome="email" placeholder="Votre adresse email" required>
                 </div>
                 <div class="form-group">
-                    <label class="label-phone">Téléphone:</label>
+                    <label class="label-phone">Téléphone (whatsapp recommandée):</label>
                     <input type="tel" name="telephone" placeholder="Votre numéro de téléphone">
                 </div>
                 <div class="form-group">
@@ -863,7 +864,7 @@ function rt_formulaire_brochure_shortcode() {
                 <button id="ask_brochure_btn" type="submit" class="btn-submit">Envoyer la demande</button>
             </form>
             <?php
-        }
+        }*/
         ?>
     </div>
     <?php
@@ -1061,6 +1062,10 @@ function rt_formation_custom_styles() {
             .custom-swal-title-class{
                 color: #085247;
             }
+            #contact-form-brochure-modal{
+                font-family: poppins;
+            }
+            
         </style>
         <?php
     }
