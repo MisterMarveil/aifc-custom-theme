@@ -129,6 +129,10 @@ h1, h2 {
     background-color: #028140;
 }
 
-.gf_progressbar .percentbar_blue, .gform_button{
+.gf_progressbar .percentbar_blue, #gform_next_button_2_13{
     background-color: #028140 !important;
+}
+
+#swal2-title{
+    color:#085247;
 }
