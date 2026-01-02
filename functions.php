@@ -661,6 +661,15 @@ function rt_widget_info_formation_shortcode($atts) {
                             </span>
                         </p>
                     <?php endif; ?>                    
+                    <?php if (!empty($formation_data['paiement'])): ?>
+                        <p class="no-margin">  
+                            <span class="compact-info-icon">💳</span>
+                            <span class="info-tag info-paiement">
+                                Modalités: 
+                                <strong><?php echo esc_html($formation_data['paiement']); ?></strong>                                
+                            </span>
+                        </p>
+                    <?php endif; ?>                    
                     <?php if (!empty($formation_data['prochaine_rentree'])): ?>
                         <p class="no-margin">  
                             <span class="compact-info-icon">📅</span>
