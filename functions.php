@@ -276,7 +276,7 @@ function rt_formation_meta_box_callback($post) {
         <div class="formation-field">
             <label for="rt_formation_conseiller_phone">📞 Numéro du conseiller (WhatsApp)</label>
             <input type="tel" id="rt_formation_conseiller_phone" name="rt_formation_conseiller_phone" 
-                value="<?php echo esc_attr($formation_conseiller_phone); ?>" placeholder="Ex: +33123456789">
+                value="<?php echo esc_attr($formation_conseiller_phone); ?>" placeholder="Ex: +237691919116">
             <p class="formation-note">Numéro au format international (avec indicatif pays)</p>
         </div>
     </div>
