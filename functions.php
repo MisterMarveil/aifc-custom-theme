@@ -154,6 +154,7 @@ function rt_formation_meta_box_callback($post) {
     $formation_prochaine_rentree = get_post_meta($post->ID, '_rt_formation_prochaine_rentree', true);
     $formation_lien_preinscription = get_post_meta($post->ID, '_rt_formation_lien_preinscription', true);
     $formation_description_courte = get_post_meta($post->ID, '_rt_formation_description_courte', true);
+    $formation_conseiller_phone = get_post_meta($post->ID, '_rt_formation_conseiller_phone', true); 
     ?>
     
     <style>
@@ -270,26 +271,14 @@ function rt_formation_meta_box_callback($post) {
                    value="<?php echo esc_url($formation_lien_preinscription); ?>" placeholder="https://votresite.com/preinscription">
             <p class="formation-note">Lien vers le formulaire de préinscription ou de réservation</p>
         </div>
-    </div>
-    
-    <!-- Section pour les modules de formation (éditeur WYSIWYG) -->
-    <div style="margin-top: 30px; border-top: 2px solid #eee; padding-top: 20px;">
-        <h3>📚 Modules de la formation</h3>
-        <p class="formation-note">Listez ici les différents modules de la formation (un par ligne)</p>
-        <?php 
-        $formation_modules = get_post_meta($post->ID, '_rt_formation_modules', true);
-        wp_editor(
-            $formation_modules ? $formation_modules : "Introduction au système d'économie islamique\nGestion des risques en finance islamique\nMode opératoire des obligations islamiques (Sukuk)",
-            'rt_formation_modules',
-            array(
-                'textarea_name' => 'rt_formation_modules',
-                'textarea_rows' => 6,
-                'media_buttons' => false,
-                'teeny' => true,
-                'quicktags' => false,
-            )
-        );
-        ?>
+
+        <!-- Numero conseiller -->
+        <div class="formation-field">
+            <label for="rt_formation_conseiller_phone">📞 Numéro du conseiller (WhatsApp)</label>
+            <input type="tel" id="rt_formation_conseiller_phone" name="rt_formation_conseiller_phone" 
+                value="<?php echo esc_attr($formation_conseiller_phone); ?>" placeholder="Ex: +33123456789">
+            <p class="formation-note">Numéro au format international (avec indicatif pays)</p>
+        </div>
     </div>
     <?php
 }
@@ -322,7 +311,7 @@ function rt_formation_save_meta_box_data($post_id) {
         'rt_formation_certification',
         'rt_formation_prochaine_rentree',
         'rt_formation_lien_preinscription',
-        'rt_formation_modules',
+        'rt_formation_conseiller_phone', 
     );
     
     foreach ($fields as $field) {
@@ -623,6 +612,18 @@ function rt_widget_info_formation_shortcode($atts) {
             <?php if (!empty($formation_data['description_courte'])): ?>
             <div class="formation-widget-desc">
                 <p><?php echo esc_html(wp_trim_words($formation_data['description_courte'], 20, '...')); ?></p>
+                  <?php 
+                    $methode_pedagogique = get_post_meta(get_the_ID(), '_rt_formation_mode', true);
+                    if (!empty($methode_pedagogique)) : ?>
+                        <p class="no-margin">  
+                            <span class="compact-info-icon">📥<</span>                  
+                            <span class="info-tag info-methode">
+                                Contenu: 
+                                <strong><?php echo esc_html($methode_pedagogique); ?></strong>
+                            </span>
+                        </p>
+                
+                 <?php endif; ?>
                 <?php if ($isCompact): ?>
                     <?php if (!empty($formation_data['certification'])): ?>
                         <p class="no-margin">  
@@ -808,9 +809,10 @@ function rt_widget_info_formation_shortcode($atts) {
         btn.addEventListener('click', function (e) {
             e.preventDefault();
 
-            const phone = '237667559009'; // numéro AIFC
+            const phone = '<?php echo esc_js(get_post_meta(get_the_ID(), '_rt_formation_conseiller_phone', true)) ?: "237654160386"; ?>';
+            const formationTitre = '<?php echo esc_js(get_the_title()); ?>';
             const message = encodeURIComponent(
-                "Bonjour AIFC, je souhaite échanger avec un conseiller concernant une formation."
+                `Bonjour AIFC, je souhaite échanger avec un conseiller concernant la formation: ${formationTitre}`
             );
 
             const whatsappUrl = `https://wa.me/${phone}?text=${message}`;
