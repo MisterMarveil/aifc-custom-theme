@@ -975,8 +975,13 @@ add_shortcode('aifc_event_slider', function () {
     $event = aifc_get_current_event();
     if (!$event) return '';
 
-    $gallery = get_field('galerie_evenement', $event->ID);
-    if (!$gallery) return '';
+    $gallery = [];
+    for ($i = 1; $i <= 5; $i++) {
+        $img = get_field("image_evenement_$i", $event->ID);
+        if ($img) $gallery[] = $img;
+    }
+    
+    if (empty($gallery)) return '';
 
     ob_start(); ?>
     <div class="aifc-event-slider swiper">
@@ -1027,6 +1032,45 @@ add_shortcode('aifc_event_cta', function () {
     <?php
     return ob_get_clean();
 });
+
+/**
+ * Assure qu'un seul événement AIFC est actif à la fois
+ */
+add_action('acf/save_post', 'aifc_ensure_single_active_event', 20);
+function aifc_ensure_single_active_event($post_id) {
+
+    // Sécurité : ignorer autosave / révisions
+    if (wp_is_post_autosave($post_id) || wp_is_post_revision($post_id)) {
+        return;
+    }
+
+    // Vérifier le post type
+    if (get_post_type($post_id) !== 'evenement_aifc') {
+        return;
+    }
+
+    // Vérifier si l'événement courant est actif
+    $is_active = get_field('evenement_actif', $post_id);
+    if (!$is_active) {
+        return;
+    }
+
+    // Désactiver tous les autres événements
+    $args = [
+        'post_type'      => 'evenement_aifc',
+        'post_status'    => 'publish',
+        'posts_per_page' => -1,
+        'post__not_in'   => [$post_id],
+        'fields'         => 'ids',
+    ];
+
+    $events = get_posts($args);
+
+    foreach ($events as $event_id) {
+        update_field('evenement_actif', false, $event_id);
+    }
+}
+
 
 
 /**
