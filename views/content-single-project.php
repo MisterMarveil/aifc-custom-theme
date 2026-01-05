@@ -24,25 +24,6 @@ $rt_project_rating = 5- intval( $ratting );*/
 
 ?>
 
-<?php if (function_exists('aifc_is_event_context') && aifc_is_event_context()): ?>
-<div id="post-<?php the_ID();?>" <?php post_class( 'project-single' );?>>
-	<div class="project-single-item">
-		<div class="project-item-wrap">
-			<div class="project-content-info sidebar-sticky">
-				<aside class="project-sidebar-left">
-					<?= do_shortcode('[aifc_event_cta]'); ?>
-				</aside>
-			</div>
-		</div>
-		<div class="project-item-content">
-			<main class="project-content">
-				<?= do_shortcode('[aifc_event_slider]'); ?>
-				<?= do_shortcode('[aifc_event_content]'); ?>
-			</main>		
-		</div>
-	</div>
-</div>
-<?php else: ?>
 <div id="post-<?php the_ID();?>" <?php post_class( 'project-single' );?>>
 	<div class="project-single-item">
 		<div class="project-item-wrap">
@@ -76,6 +57,5 @@ $rt_project_rating = 5- intval( $ratting );*/
 		</div>
 	</div>
 </div>
-<?php endif; ?>
 
 
