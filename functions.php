@@ -917,6 +917,33 @@ function aifc_get_next_event() {
 }
 
 /**
+ * Résout l'événement AIFC à utiliser
+ * Priorité :
+ * 1. post_id passé au shortcode
+ * 2. contexte single-evenement_aifc
+ * 3. événement actif
+ */
+function aifc_resolve_event($atts = []) {
+
+    // 1️⃣ post_id explicite
+    if (!empty($atts['post_id'])) {
+        $post = get_post((int) $atts['post_id']);
+        if ($post && $post->post_type === 'evenement_aifc') {
+            return $post;
+        }
+    }
+
+    // 2️⃣ Contexte single
+    if (is_singular('evenement_aifc')) {
+        return get_post();
+    }
+
+    // 3️⃣ Événement actif
+    return aifc_get_next_event();
+}
+
+
+/**
  * Détermine si le contexte courant est un événement AIFC
  */
 function aifc_is_event_context() {
@@ -932,13 +959,13 @@ function aifc_is_event_context() {
     return false;
 }
 
-add_shortcode('aifc_event_content', function () {
+add_shortcode('aifc_event_content', function ($atts) {
 
-    if (!aifc_is_event_context()) {
-        return '';
-    }
+    $atts = shortcode_atts([
+        'post_id' => null,
+    ], $atts);
 
-    $event = aifc_get_current_event();
+    $event = aifc_resolve_event($atts);
     if (!$event) return '';
 
     setup_postdata($event);
@@ -962,17 +989,19 @@ add_shortcode('aifc_event_content', function () {
 
     </article>
     <?php
+
     wp_reset_postdata();
     return ob_get_clean();
 });
 
-add_shortcode('aifc_event_slider', function () {
 
-    if (!aifc_is_event_context()) {
-        return '';
-    }
+add_shortcode('aifc_event_slider', function ($atts) {
 
-    $event = aifc_get_current_event();
+    $atts = shortcode_atts([
+        'post_id' => null,
+    ], $atts);
+
+    $event = aifc_resolve_event($atts);
     if (!$event) return '';
 
     $gallery = [];
@@ -980,7 +1009,7 @@ add_shortcode('aifc_event_slider', function () {
         $img = get_field("image_evenement_$i", $event->ID);
         if ($img) $gallery[] = $img;
     }
-    
+
     if (empty($gallery)) return '';
 
     ob_start(); ?>
@@ -995,16 +1024,18 @@ add_shortcode('aifc_event_slider', function () {
         <div class="swiper-pagination"></div>
     </div>
     <?php
+
     return ob_get_clean();
 });
 
-add_shortcode('aifc_event_cta', function () {
 
-    if (!aifc_is_event_context()) {
-        return '';
-    }
+add_shortcode('aifc_event_cta', function ($atts) {
 
-    $event = aifc_get_current_event();
+    $atts = shortcode_atts([
+        'post_id' => null,
+    ], $atts);
+
+    $event = aifc_resolve_event($atts);
     if (!$event) return '';
 
     ob_start(); ?>
@@ -1023,15 +1054,17 @@ add_shortcode('aifc_event_cta', function () {
         <?php endif; ?>
 
         <?php if (get_field('cta_conseiller', $event->ID)): ?>
-            <a class="btn btn-whatsapp" id="contact-form-conseiller">
+            <a class="btn btn-whatsapp" href="#contact-form-conseiller">
                 Échanger avec un conseiller
             </a>
         <?php endif; ?>
 
     </div>
     <?php
+
     return ob_get_clean();
 });
+
 
 /**
  * Assure qu'un seul événement AIFC est actif à la fois
