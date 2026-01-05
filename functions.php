@@ -522,7 +522,7 @@ function rt_fiche_formation_shortcode($atts) {
         <?php endif; ?>
         
         <!-- Bouton de préinscription -->
-        <?php if (!empty($formation_data['lien_preinscription'])): ?>
+        <?php $formation_data['lien_preinscription'] = !empty($formation_data['lien_preinscription']) ? $formation_data['lien_preinscription'] : "/preinscription-aux-formations-aifc/?_form=$post_id"  ?>
         <div class="formation-section formation-preinscription">
             <a href="<?php echo esc_url($formation_data['lien_preinscription']); ?>" 
                class="btn-formation-preinscription" 
@@ -530,7 +530,6 @@ function rt_fiche_formation_shortcode($atts) {
                🔗 Préinscription - Réserver une place
             </a>
         </div>
-        <?php endif; ?>
     </div>
     <?php
     
@@ -616,10 +615,10 @@ function rt_widget_info_formation_shortcode($atts) {
                     $methode_pedagogique = get_post_meta(get_the_ID(), '_rt_formation_mode', true);
                     if (!empty($methode_pedagogique)) : ?>
                         <p class="no-margin">  
-                            <span class="compact-info-icon">📥<</span>                  
+                            <span class="compact-info-icon">📥</span>                  
                             <span class="info-tag info-methode">
                                 Contenu: 
-                                <strong><?php echo esc_html($methode_pedagogique); ?></strong>
+                                <strong><small><?php echo esc_html($methode_pedagogique); ?></small></strong>
                             </span>
                         </p>
                 
@@ -765,7 +764,7 @@ function rt_widget_info_formation_shortcode($atts) {
                 
                 <div class="formation-actions-list">
                     <!-- Préinscription -->
-                    <?php if (!empty($formation_data['lien_preinscription'])): ?>
+                    <?php $formation_data['lien_preinscription'] = !empty($formation_data['lien_preinscription']) ? $formation_data['lien_preinscription'] : "/preinscription-aux-formations-aifc/?_form=$post_id"  ?>
                     <a href="<?php echo esc_url($formation_data['lien_preinscription']); ?>" 
                        class="formation-action-btn btn-preinscription" 
                        target="_blank">
@@ -776,7 +775,7 @@ function rt_widget_info_formation_shortcode($atts) {
                         </span>
                         <span class="action-arrow">→</span>
                     </a>
-                    <?php endif; ?>
+                    
                     
                     <!-- Brochure détaillée -->
                    <a href="#" id="open-brochure-modal" class="formation-action-btn btn-brochure">
