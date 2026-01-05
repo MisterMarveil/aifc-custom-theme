@@ -891,6 +891,145 @@ function populate_formation_field() {
 }
 
 /**
+ * CPT : Événements AIFC
+ */
+function aifc_register_event_cpt() {
+    register_post_type('evenement_aifc', [
+        'label' => 'Événements AIFC',
+        'public' => true,
+        'menu_icon' => 'dashicons-calendar-alt',
+        'supports' => ['title', 'editor', 'thumbnail'],
+        'show_in_rest' => true,
+        'rewrite' => ['slug' => 'evenements-aifc'],
+    ]);
+}
+add_action('init', 'aifc_register_event_cpt');
+
+function aifc_get_next_event() {
+    $query = new WP_Query([
+        'post_type' => 'evenement_aifc',
+        'meta_key' => 'evenement_actif',
+        'meta_value' => '1',
+        'posts_per_page' => 1
+    ]);
+
+    return $query->have_posts() ? $query->posts[0] : null;
+}
+
+/**
+ * Détermine si le contexte courant est un événement AIFC
+ */
+function aifc_is_event_context() {
+    if (is_singular('evenement_aifc')) {
+        return true;
+    }
+
+    // Cas page "prochaine édition" (par slug ou ID)
+    if (is_page() && get_post_field('post_name', get_the_ID()) === 'prochaine-edition') {
+        return true;
+    }
+
+    return false;
+}
+
+add_shortcode('aifc_event_content', function () {
+
+    if (!aifc_is_event_context()) {
+        return '';
+    }
+
+    $event = aifc_get_current_event();
+    if (!$event) return '';
+
+    setup_postdata($event);
+
+    ob_start(); ?>
+    <article class="aifc-event-content">
+
+        <h1><?= esc_html($event->post_title); ?></h1>
+
+        <p class="aifc-event-meta">
+            <strong>Période :</strong> <?= esc_html(get_field('periode_evenement', $event->ID)); ?><br>
+            <strong>Lieu :</strong> <?= esc_html(get_field('lieu_evenement', $event->ID)); ?>
+        </p>
+
+        <?php if ($theme = get_field('theme_evenement', $event->ID)): ?>
+            <h3>Thème</h3>
+            <p><?= esc_html($theme); ?></p>
+        <?php endif; ?>
+
+        <?= apply_filters('the_content', $event->post_content); ?>
+
+    </article>
+    <?php
+    wp_reset_postdata();
+    return ob_get_clean();
+});
+
+add_shortcode('aifc_event_slider', function () {
+
+    if (!aifc_is_event_context()) {
+        return '';
+    }
+
+    $event = aifc_get_current_event();
+    if (!$event) return '';
+
+    $gallery = get_field('galerie_evenement', $event->ID);
+    if (!$gallery) return '';
+
+    ob_start(); ?>
+    <div class="aifc-event-slider swiper">
+        <div class="swiper-wrapper">
+            <?php foreach ($gallery as $img): ?>
+                <div class="swiper-slide">
+                    <img src="<?= esc_url($img['url']); ?>" alt="">
+                </div>
+            <?php endforeach; ?>
+        </div>
+        <div class="swiper-pagination"></div>
+    </div>
+    <?php
+    return ob_get_clean();
+});
+
+add_shortcode('aifc_event_cta', function () {
+
+    if (!aifc_is_event_context()) {
+        return '';
+    }
+
+    $event = aifc_get_current_event();
+    if (!$event) return '';
+
+    ob_start(); ?>
+    <div class="aifc-event-cta">
+
+        <?php if (get_field('cta_preinscription', $event->ID)): ?>
+            <a class="btn btn-primary" href="#preinscription">Préinscription</a>
+        <?php endif; ?>
+
+        <?php if (get_field('cta_reservation', $event->ID)): ?>
+            <a class="btn btn-secondary" href="#reservation">Réserver une place</a>
+        <?php endif; ?>
+
+        <?php if (get_field('cta_brochure', $event->ID)): ?>
+            <a class="btn btn-outline" href="#brochure">Télécharger la brochure</a>
+        <?php endif; ?>
+
+        <?php if (get_field('cta_conseiller', $event->ID)): ?>
+            <a class="btn btn-whatsapp" id="contact-form-conseiller">
+                Échanger avec un conseiller
+            </a>
+        <?php endif; ?>
+
+    </div>
+    <?php
+    return ob_get_clean();
+});
+
+
+/**
  * Formulaire de contact pour conseiller
  */
 add_shortcode('formulaire_conseiller', 'rt_formulaire_conseiller_shortcode');
