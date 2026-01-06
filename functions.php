@@ -959,50 +959,20 @@ function aifc_is_event_context() {
     return false;
 }
 
-add_shortcode('aifc_event_content', function ($atts) {
-
-    $atts = shortcode_atts([
-        'post_id' => null,
-    ], $atts);
-
-    $event = aifc_resolve_event($atts);
-    if (!$event) return '';
-
-    setup_postdata($event);
-
-    ob_start(); ?>
-    <article class="aifc-event-content">
-
-        <h1><?= esc_html($event->post_title); ?></h1>
-
-        <p class="aifc-event-meta">
-            <strong>Période :</strong> <?= esc_html(get_field('periode_evenement', $event->ID)); ?><br>
-            <strong>Lieu :</strong> <?= esc_html(get_field('lieu_evenement', $event->ID)); ?>
-        </p>
-
-        <?php if ($theme = get_field('theme_evenement', $event->ID)): ?>
-            <h3>Thème</h3>
-            <p><?= esc_html($theme); ?></p>
-        <?php endif; ?>
-
-        <?= apply_filters('the_content', $event->post_content); ?>
-
-    </article>
-    <?php
-
-    wp_reset_postdata();
-    return ob_get_clean();
-});
-
-
+/**
+ * Shortcode Slider amélioré
+ */
 add_shortcode('aifc_event_slider', function ($atts) {
-
     $atts = shortcode_atts([
         'post_id' => null,
+        'autoplay' => '5000',
+        'navigation' => 'true',
+        'pagination' => 'true',
+        'effect' => 'slide',
     ], $atts);
 
     $event = aifc_resolve_event($atts);
-    if (!$event) return '';
+    if (!$event) return '<p class="aifc-no-slider">Aucun événement à afficher.</p>';
 
     $gallery = [];
     for ($i = 1; $i <= 5; $i++) {
@@ -1010,58 +980,265 @@ add_shortcode('aifc_event_slider', function ($atts) {
         if ($img) $gallery[] = $img;
     }
 
-    if (empty($gallery)) return '';
+    if (empty($gallery)) {
+        // Image par défaut
+        return '<div class="aifc-event-slider-container">
+            <div class="aifc-event-slider swiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide">
+                        <img src="' . get_template_directory_uri() . '/assets/default-event.jpg" alt="Événement AIFC">
+                        <div class="aifc-slider-overlay">
+                            <h3>' . esc_html($event->post_title) . '</h3>
+                            <p>Prochain événement AIFC</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </div>';
+    }
 
     ob_start(); ?>
-    <div class="aifc-event-slider swiper">
-        <div class="swiper-wrapper">
-            <?php foreach ($gallery as $img): ?>
-                <div class="swiper-slide">
-                    <img src="<?= esc_url($img['url']); ?>" alt="">
-                </div>
-            <?php endforeach; ?>
+    
+    <div class="aifc-event-slider-container">
+        <div class="aifc-event-slider swiper"
+             data-autoplay="<?php echo esc_attr($atts['autoplay']); ?>"
+             data-effect="<?php echo esc_attr($atts['effect']); ?>">
+            
+            <div class="swiper-wrapper">
+                <?php foreach ($gallery as $index => $img): ?>
+                    <div class="swiper-slide">
+                        <img src="<?= esc_url($img['url']); ?>" 
+                             alt="<?= esc_attr($img['alt'] ?: 'Image événement AIFC'); ?>">
+                        <div class="aifc-slider-overlay">
+                            <h3><?= esc_html($event->post_title); ?></h3>
+                            <p>Image <?= $index + 1; ?> - <?= esc_html($img['caption'] ?: 'Événement AIFC'); ?></p>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+            
+            <?php if ($atts['pagination'] === 'true'): ?>
+                <div class="swiper-pagination"></div>
+            <?php endif; ?>
+            
+            <?php if ($atts['navigation'] === 'true'): ?>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
+            <?php endif; ?>
         </div>
-        <div class="swiper-pagination"></div>
     </div>
+    
     <?php
-
     return ob_get_clean();
 });
 
-
+/**
+ * Shortcode CTA amélioré
+ */
 add_shortcode('aifc_event_cta', function ($atts) {
-
     $atts = shortcode_atts([
         'post_id' => null,
+        'title' => 'Réservez votre place',
+        'show_note' => 'true',
     ], $atts);
 
     $event = aifc_resolve_event($atts);
     if (!$event) return '';
 
+    $preinscription = get_field('cta_preinscription', $event->ID);
+    $reservation = get_field('cta_reservation', $event->ID);
+    $brochure = get_field('cta_brochure', $event->ID);
+    $conseiller = get_field('cta_conseiller', $event->ID);
+    
+    // Liens personnalisables
+    $link_preinscription = get_field('lien_preinscription', $event->ID) ?: '#preinscription';
+    $link_reservation = get_field('lien_reservation', $event->ID) ?: '#reservation';
+    $link_brochure = get_field('lien_brochure', $event->ID) ?: '#brochure';
+    $link_conseiller = get_field('lien_conseiller', $event->ID) ?: '#contact-form-conseiller';
+    
+    $whatsapp_number = get_field('whatsapp_conseiller', $event->ID) ?: '237654160386';
+    
     ob_start(); ?>
+    
     <div class="aifc-event-cta">
-
-        <?php if (get_field('cta_preinscription', $event->ID)): ?>
-            <a class="btn btn-primary" href="#preinscription">Préinscription</a>
+        <h3><?= esc_html($atts['title']); ?></h3>
+        
+        <div class="aifc-cta-buttons">
+            <?php if ($preinscription): ?>
+                <a href="<?= esc_url($link_preinscription); ?>" 
+                   class="aifc-cta-btn aifc-cta-btn-primary"
+                   target="_blank">
+                    <span class="aifc-cta-icon">📝</span>
+                    <span>Préinscription en ligne</span>
+                </a>
+            <?php endif; ?>
+            
+            <?php if ($reservation): ?>
+                <a href="<?= esc_url($link_reservation); ?>" 
+                   class="aifc-cta-btn aifc-cta-btn-secondary"
+                   target="_blank">
+                    <span class="aifc-cta-icon">🎟️</span>
+                    <span>Réserver une place</span>
+                </a>
+            <?php endif; ?>
+            
+            <?php if ($brochure): ?>
+                <a href="<?= esc_url($link_brochure); ?>" 
+                   class="aifc-cta-btn aifc-cta-btn-outline"
+                   target="_blank">
+                    <span class="aifc-cta-icon">📄</span>
+                    <span>Télécharger la brochure</span>
+                </a>
+            <?php endif; ?>
+            
+            <?php if ($conseiller): ?>
+                <a href="https://wa.me/<?= esc_attr($whatsapp_number); ?>?text=<?= urlencode('Bonjour AIFC, je souhaite échanger avec un conseiller concernant votre événement : ' . get_the_title($event->ID)); ?>" 
+                   class="aifc-cta-btn aifc-cta-btn-whatsapp"
+                   target="_blank">
+                    <span class="aifc-cta-icon">💬</span>
+                    <span>Échanger avec un conseiller</span>
+                </a>
+            <?php endif; ?>
+        </div>
+        
+        <?php if ($atts['show_note'] === 'true'): ?>
+            <div class="aifc-cta-note">
+                <p><strong>⚠️ Places limitées</strong><br>
+                Les inscriptions sont traitées par ordre d'arrivée.</p>
+            </div>
         <?php endif; ?>
-
-        <?php if (get_field('cta_reservation', $event->ID)): ?>
-            <a class="btn btn-secondary" href="#reservation">Réserver une place</a>
-        <?php endif; ?>
-
-        <?php if (get_field('cta_brochure', $event->ID)): ?>
-            <a class="btn btn-outline" href="#brochure">Télécharger la brochure</a>
-        <?php endif; ?>
-
-        <?php if (get_field('cta_conseiller', $event->ID)): ?>
-            <a class="btn btn-whatsapp" href="#contact-form-conseiller">
-                Échanger avec un conseiller
-            </a>
-        <?php endif; ?>
-
     </div>
+    
     <?php
+    return ob_get_clean();
+});
 
+/**
+ * Shortcode Contenu amélioré
+ */
+add_shortcode('aifc_event_content', function ($atts) {
+    $atts = shortcode_atts([
+        'post_id' => null,
+        'show_title' => 'true',
+        'show_meta' => 'true',
+        'show_theme' => 'true',
+        'show_resume' => 'true',
+        'show_countdown' => 'true',
+    ], $atts);
+
+    $event = aifc_resolve_event($atts);
+    if (!$event) return '';
+
+    setup_postdata($event);
+    
+    $periode = get_field('periode_evenement', $event->ID);
+    $lieu = get_field('lieu_evenement', $event->ID);
+    $theme = get_field('theme_evenement', $event->ID);
+    $resume = get_field('resume_evenement', $event->ID);
+    $date_debut = get_field('date_debut', $event->ID);
+    $date_fin = get_field('date_fin', $event->ID);
+    
+    ob_start(); ?>
+    
+    <div class="aifc-event-content">
+        <?php if ($atts['show_title'] === 'true'): ?>
+        <div class="aifc-event-header">
+            <h1 class="aifc-event-title"><?= esc_html($event->post_title); ?></h1>
+            <?php if ($theme && $atts['show_theme'] === 'true'): ?>
+                <p class="aifc-event-subtitle">Thème : <?= esc_html($theme); ?></p>
+            <?php endif; ?>
+        </div>
+        <?php endif; ?>
+        
+        <?php if ($atts['show_meta'] === 'true' && ($periode || $lieu)): ?>
+        <div class="aifc-event-meta-grid">
+            <?php if ($periode): ?>
+            <div class="aifc-meta-card">
+                <span class="aifc-meta-icon">📅</span>
+                <span class="aifc-meta-label">Période</span>
+                <span class="aifc-meta-value"><?= esc_html($periode); ?></span>
+            </div>
+            <?php endif; ?>
+            
+            <?php if ($lieu): ?>
+            <div class="aifc-meta-card">
+                <span class="aifc-meta-icon">📍</span>
+                <span class="aifc-meta-label">Lieu</span>
+                <span class="aifc-meta-value"><?= esc_html($lieu); ?></span>
+            </div>
+            <?php endif; ?>
+            
+            <?php if ($date_debut && $date_fin && $atts['show_countdown'] === 'true'): ?>
+            <div class="aifc-meta-card">
+                <span class="aifc-meta-icon">⏳</span>
+                <span class="aifc-meta-label">Début dans</span>
+                <span class="aifc-meta-value aifc-countdown-trigger" 
+                      data-date="<?= esc_attr($date_debut); ?>">
+                    Calcul en cours...
+                </span>
+            </div>
+            <?php endif; ?>
+        </div>
+        <?php endif; ?>
+        
+        <?php if ($theme && $atts['show_theme'] === 'true'): ?>
+        <div class="aifc-event-theme">
+            <h3>Thème de l'événement</h3>
+            <p><?= esc_html($theme); ?></p>
+        </div>
+        <?php endif; ?>
+        
+        <?php if ($resume && $atts['show_resume'] === 'true'): ?>
+        <div class="aifc-event-resume">
+            <?= wp_kses_post($resume); ?>
+        </div>
+        <?php endif; ?>
+        
+        <div class="aifc-event-description">
+            <?= apply_filters('the_content', $event->post_content); ?>
+        </div>
+        
+        <?php if ($date_debut && $date_fin && $atts['show_countdown'] === 'true'): ?>
+        <div class="aifc-countdown">
+            <h3 class="aifc-countdown-title">🚀 L'événement commence dans :</h3>
+            <div class="aifc-countdown-timer" 
+                 data-date="<?= esc_attr($date_debut); ?>">
+                <div class="aifc-countdown-item">
+                    <span class="aifc-countdown-number" data-days>00</span>
+                    <span class="aifc-countdown-label">Jours</span>
+                </div>
+                <div class="aifc-countdown-item">
+                    <span class="aifc-countdown-number" data-hours>00</span>
+                    <span class="aifc-countdown-label">Heures</span>
+                </div>
+                <div class="aifc-countdown-item">
+                    <span class="aifc-countdown-number" data-minutes>00</span>
+                    <span class="aifc-countdown-label">Minutes</span>
+                </div>
+                <div class="aifc-countdown-item">
+                    <span class="aifc-countdown-number" data-seconds>00</span>
+                    <span class="aifc-countdown-label">Secondes</span>
+                </div>
+            </div>
+        </div>
+        <?php endif; ?>
+        
+        <div class="aifc-event-actions">
+            <a href="#preinscription" class="aifc-cta-btn aifc-cta-btn-primary">
+                S'inscrire maintenant
+            </a>
+            <a href="#brochure" class="aifc-cta-btn aifc-cta-btn-outline">
+                Télécharger le programme
+            </a>
+            <a href="#contact" class="aifc-cta-btn aifc-cta-btn-secondary">
+                Nous contacter
+            </a>
+        </div>
+    </div>
+    
+    <?php
+    wp_reset_postdata();
     return ob_get_clean();
 });
 
@@ -1344,6 +1521,38 @@ function enqueue_sticky_menu_script() {
         'offset' => 100,
         'adminBar' => true
     ));
+}
+
+// Enqueue les scripts pour les événements
+add_action('wp_enqueue_scripts', 'aifc_event_scripts');
+function aifc_event_scripts() {
+    if (is_singular('evenement_aifc') || aifc_is_event_context()) {
+        // Swiper JS (si non déjà chargé)
+        if (!wp_script_is('swiper', 'enqueued')) {
+            wp_enqueue_script(
+                'swiper',
+                'https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js',
+                array(),
+                '8.4.5',
+                true
+            );
+            wp_enqueue_style(
+                'swiper-css',
+                'https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css',
+                array(),
+                '8.4.5'
+            );
+        }
+        
+        // Script personnalisé
+        wp_enqueue_script(
+            'aifc-events',
+            get_stylesheet_directory_uri() . '/js/aifc-events.js',
+            array('jquery', 'swiper'),
+            '1.0.0',
+            true
+        );
+    }
 }
 
 add_action('wp_enqueue_scripts', function () {
@@ -1769,4 +1978,645 @@ function rt_widget_formation_styles() {
         </style>
         <?php
     }
+
+    if (is_singular('evenement_aifc') || aifc_is_event_context()) :
+        ?>
+        <style>
+            /* Layout principal */
+            .aifc-event-layout {
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 40px;
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 30px 20px;
+            }
+            
+            @media (min-width: 992px) {
+                .aifc-event-layout {
+                    grid-template-columns: 300px 1fr;
+                }
+            }
+            
+            /* Sidebar CTA */
+            .aifc-event-sidebar {
+                position: sticky;
+                top: 100px;
+                height: fit-content;
+            }
+            
+            .aifc-event-cta {
+                background: linear-gradient(135deg, #085247, #028140);
+                border-radius: 15px;
+                padding: 25px;
+                color: white;
+                box-shadow: 0 10px 30px rgba(8, 82, 71, 0.2);
+                border: 2px solid rgba(255, 255, 255, 0.1);
+            }
+            
+            .aifc-event-cta h3 {
+                color: white;
+                margin-top: 0;
+                font-size: 1.5em;
+                border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+                padding-bottom: 15px;
+                margin-bottom: 20px;
+            }
+            
+            .aifc-cta-buttons {
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .aifc-cta-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 12px;
+                padding: 16px 20px;
+                border-radius: 10px;
+                text-decoration: none;
+                font-weight: 600;
+                font-size: 0.95em;
+                transition: all 0.3s ease;
+                text-align: center;
+                border: none;
+                cursor: pointer;
+                width: 100%;
+            }
+            
+            .aifc-cta-btn-primary {
+                background: white;
+                color: #085247;
+                box-shadow: 0 4px 15px rgba(255, 255, 255, 0.2);
+            }
+            
+            .aifc-cta-btn-primary:hover {
+                background: #f8f9fa;
+                transform: translateY(-3px);
+                box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
+            }
+            
+            .aifc-cta-btn-secondary {
+                background: rgba(255, 255, 255, 0.1);
+                color: white;
+                border: 2px solid rgba(255, 255, 255, 0.3);
+            }
+            
+            .aifc-cta-btn-secondary:hover {
+                background: rgba(255, 255, 255, 0.2);
+                transform: translateY(-3px);
+                border-color: white;
+            }
+            
+            .aifc-cta-btn-whatsapp {
+                background: #25D366;
+                color: white;
+                position: relative;
+                overflow: hidden;
+            }
+            
+            .aifc-cta-btn-whatsapp:hover {
+                background: #128C7E;
+                transform: translateY(-3px);
+            }
+            
+            .aifc-cta-btn-outline {
+                background: transparent;
+                color: white;
+                border: 2px solid rgba(255, 255, 255, 0.5);
+            }
+            
+            .aifc-cta-btn-outline:hover {
+                background: rgba(255, 255, 255, 0.1);
+                border-color: white;
+            }
+            
+            .aifc-cta-icon {
+                font-size: 1.2em;
+            }
+            
+            .aifc-cta-note {
+                margin-top: 20px;
+                padding: 15px;
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 8px;
+                font-size: 0.9em;
+                text-align: center;
+            }
+            
+            /* Slider amélioré */
+            .aifc-event-slider-container {
+                position: relative;
+                border-radius: 15px;
+                overflow: hidden;
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+                margin-bottom: 30px;
+            }
+            
+            .aifc-event-slider {
+                width: 100%;
+                height: 500px;
+                position: relative;
+            }
+            
+            .aifc-event-slider .swiper-wrapper {
+                align-items: stretch;
+            }
+            
+            .aifc-event-slider .swiper-slide {
+                height: auto;
+                position: relative;
+                overflow: hidden;
+            }
+            
+            .aifc-event-slider .swiper-slide img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: transform 0.5s ease;
+            }
+            
+            .aifc-event-slider .swiper-slide:hover img {
+                transform: scale(1.05);
+            }
+            
+            .aifc-slider-overlay {
+                position: absolute;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: linear-gradient(transparent, rgba(0,0,0,0.8));
+                color: white;
+                padding: 30px;
+                transform: translateY(100%);
+                transition: transform 0.3s ease;
+            }
+            
+            .aifc-event-slider .swiper-slide:hover .aifc-slider-overlay {
+                transform: translateY(0);
+            }
+            
+            .swiper-pagination {
+                position: absolute;
+                bottom: 20px !important;
+            }
+            
+            .swiper-pagination-bullet {
+                background: rgba(255, 255, 255, 0.5);
+                width: 12px;
+                height: 12px;
+                opacity: 1;
+            }
+            
+            .swiper-pagination-bullet-active {
+                background: #028140;
+            }
+            
+            /* Navigation slider */
+            .swiper-button-next,
+            .swiper-button-prev {
+                color: white;
+                background: rgba(8, 82, 71, 0.8);
+                width: 50px;
+                height: 50px;
+                border-radius: 50%;
+                transition: all 0.3s;
+            }
+            
+            .swiper-button-next:after,
+            .swiper-button-prev:after {
+                font-size: 20px;
+            }
+            
+            .swiper-button-next:hover,
+            .swiper-button-prev:hover {
+                background: #085247;
+                transform: scale(1.1);
+            }
+            
+            /* Contenu principal */
+            .aifc-event-main {
+                background: white;
+                border-radius: 15px;
+                padding: 30px;
+                box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            }
+            
+            .aifc-event-header {
+                margin-bottom: 30px;
+                padding-bottom: 20px;
+                border-bottom: 3px solid #028140;
+            }
+            
+            .aifc-event-title {
+                color: #085247;
+                font-size: 2.2em;
+                margin-bottom: 10px;
+                line-height: 1.2;
+            }
+            
+            .aifc-event-subtitle {
+                color: #666;
+                font-size: 1.1em;
+                font-weight: 300;
+            }
+            
+            .aifc-event-meta-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                gap: 20px;
+                margin: 25px 0;
+            }
+            
+            .aifc-meta-card {
+                background: #f8f9fa;
+                border-radius: 10px;
+                padding: 20px;
+                border-left: 4px solid #028140;
+                transition: transform 0.3s;
+            }
+            
+            .aifc-meta-card:hover {
+                transform: translateY(-5px);
+                background: #e9ecef;
+            }
+            
+            .aifc-meta-icon {
+                font-size: 24px;
+                margin-bottom: 10px;
+                color: #085247;
+            }
+            
+            .aifc-meta-label {
+                display: block;
+                font-size: 0.9em;
+                color: #666;
+                margin-bottom: 5px;
+                font-weight: 500;
+            }
+            
+            .aifc-meta-value {
+                display: block;
+                font-size: 1.1em;
+                color: #333;
+                font-weight: 600;
+            }
+            
+            .aifc-event-content {
+                line-height: 1.8;
+                color: #444;
+            }
+            
+            .aifc-event-content h2,
+            .aifc-event-content h3 {
+                color: #085247;
+                margin-top: 30px;
+                padding-bottom: 10px;
+                border-bottom: 2px solid #e9ecef;
+            }
+            
+            .aifc-event-content h2 {
+                font-size: 1.8em;
+            }
+            
+            .aifc-event-content h3 {
+                font-size: 1.5em;
+            }
+            
+            .aifc-event-resume {
+                background: linear-gradient(135deg, #f8fff8, #f0f9f0);
+                border-left: 4px solid #028140;
+                padding: 25px;
+                border-radius: 8px;
+                margin: 25px 0;
+                font-size: 1.1em;
+                color: #333;
+            }
+            
+            .aifc-event-theme {
+                background: linear-gradient(135deg, #085247, #028140);
+                color: white;
+                padding: 20px;
+                border-radius: 10px;
+                margin: 25px 0;
+                position: relative;
+                overflow: hidden;
+            }
+            
+            .aifc-event-theme:before {
+                content: "✨";
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                font-size: 2em;
+                opacity: 0.3;
+            }
+            
+            .aifc-event-theme h3 {
+                color: white;
+                margin-top: 0;
+            }
+            
+            /* Boutons d'action */
+            .aifc-event-actions {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+                gap: 15px;
+                margin-top: 40px;
+                padding-top: 30px;
+                border-top: 2px dashed #dee2e6;
+            }
+            
+            /* Countdown */
+            .aifc-countdown {
+                background: linear-gradient(135deg, #085247, #028140);
+                color: white;
+                padding: 25px;
+                border-radius: 15px;
+                text-align: center;
+                margin: 30px 0;
+            }
+            
+            .aifc-countdown-title {
+                font-size: 1.3em;
+                margin-bottom: 20px;
+            }
+            
+            .aifc-countdown-timer {
+                display: flex;
+                justify-content: center;
+                gap: 15px;
+                flex-wrap: wrap;
+            }
+            
+            .aifc-countdown-item {
+                background: rgba(255, 255, 255, 0.1);
+                padding: 15px;
+                border-radius: 10px;
+                min-width: 70px;
+            }
+            
+            .aifc-countdown-number {
+                font-size: 2em;
+                font-weight: bold;
+                display: block;
+            }
+            
+            .aifc-countdown-label {
+                font-size: 0.9em;
+                opacity: 0.8;
+            }
+            
+            /* Responsive */
+            @media (max-width: 768px) {
+                .aifc-event-layout {
+                    grid-template-columns: 1fr;
+                    gap: 30px;
+                }
+                
+                .aifc-event-title {
+                    font-size: 1.8em;
+                }
+                
+                .aifc-event-slider {
+                    height: 300px;
+                }
+                
+                .aifc-event-sidebar {
+                    position: static;
+                }
+                
+                .aifc-event-meta-grid {
+                    grid-template-columns: 1fr;
+                }
+                
+                .aifc-event-actions {
+                    grid-template-columns: 1fr;
+                }
+                
+                .swiper-button-next,
+                .swiper-button-prev {
+                    display: none;
+                }
+            }
+            
+            /* Animation */
+            @keyframes fadeInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+            
+            .aifc-event-layout {
+                animation: fadeInUp 0.6s ease;
+            }
+
+            /* Cartes d'information */
+            .aifc-event-info-card {
+                background: white;
+                border-radius: 12px;
+                padding: 20px;
+                margin-top: 20px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+                border: 1px solid #eaeaea;
+            }
+
+            .aifc-event-info-card h4 {
+                color: #085247;
+                margin-top: 0;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 15px;
+            }
+
+            .aifc-info-list {
+                list-style: none;
+                padding: 0;
+                margin: 0;
+            }
+
+            .aifc-info-list li {
+                display: flex;
+                justify-content: space-between;
+                padding: 8px 0;
+                border-bottom: 1px solid #f0f0f0;
+            }
+
+            .aifc-info-list li:last-child {
+                border-bottom: none;
+            }
+
+            .aifc-info-label {
+                font-weight: 500;
+                color: #666;
+            }
+
+            .aifc-info-value {
+                color: #333;
+                text-align: right;
+            }
+
+            /* Partage */
+            .aifc-event-share {
+                margin-top: 20px;
+            }
+
+            .aifc-share-buttons {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+                margin-top: 10px;
+            }
+
+            .aifc-share-btn {
+                padding: 10px;
+                border-radius: 8px;
+                text-align: center;
+                text-decoration: none;
+                font-size: 0.9em;
+                transition: all 0.3s;
+                color: white;
+            }
+
+            .aifc-share-btn.facebook {
+                background: #3b5998;
+            }
+
+            .aifc-share-btn.twitter {
+                background: #1da1f2;
+            }
+
+            .aifc-share-btn.whatsapp {
+                background: #25d366;
+            }
+
+            .aifc-share-btn:hover {
+                opacity: 0.9;
+                transform: translateY(-2px);
+            }
+
+            /* Programme */
+            .aifc-programme-timeline {
+                position: relative;
+                padding: 20px 0;
+            }
+
+            .aifc-programme-timeline:before {
+                content: '';
+                position: absolute;
+                left: 30px;
+                top: 0;
+                bottom: 0;
+                width: 2px;
+                background: #028140;
+            }
+
+            .aifc-programme-item {
+                display: flex;
+                margin-bottom: 25px;
+                position: relative;
+            }
+
+            .aifc-programme-time {
+                width: 60px;
+                padding-right: 20px;
+                font-weight: bold;
+                color: #085247;
+                text-align: right;
+                position: relative;
+            }
+
+            .aifc-programme-time:after {
+                content: '';
+                position: absolute;
+                right: -6px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 14px;
+                height: 14px;
+                border-radius: 50%;
+                background: #028140;
+                border: 3px solid white;
+                box-shadow: 0 0 0 3px #028140;
+            }
+
+            .aifc-programme-content {
+                flex: 1;
+                background: #f8f9fa;
+                padding: 20px;
+                border-radius: 10px;
+                margin-left: 20px;
+                border-left: 4px solid #028140;
+            }
+
+            .aifc-programme-content h4 {
+                margin-top: 0;
+                color: #085247;
+            }
+
+            .aifc-programme-speaker {
+                margin-top: 10px;
+                padding-top: 10px;
+                border-top: 1px dashed #ddd;
+                font-size: 0.9em;
+                color: #666;
+            }
+
+            /* Intervenants */
+            .aifc-speakers-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 25px;
+                margin-top: 20px;
+            }
+
+            .aifc-speaker-card {
+                background: white;
+                border-radius: 12px;
+                padding: 20px;
+                text-align: center;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+                transition: transform 0.3s;
+            }
+
+            .aifc-speaker-card:hover {
+                transform: translateY(-5px);
+            }
+
+            .aifc-speaker-photo {
+                width: 100px;
+                height: 100px;
+                border-radius: 50%;
+                object-fit: cover;
+                margin: 0 auto 15px;
+                border: 4px solid #f0f0f0;
+            }
+
+            .aifc-speaker-card h4 {
+                margin: 10px 0 5px;
+                color: #085247;
+            }
+
+            .aifc-speaker-title {
+                color: #666;
+                font-size: 0.9em;
+                margin-bottom: 10px;
+            }
+
+            .aifc-speaker-bio {
+                color: #555;
+                font-size: 0.9em;
+                line-height: 1.5;
+            }
+        </style>
+        <?php
+    endif;    
 }
