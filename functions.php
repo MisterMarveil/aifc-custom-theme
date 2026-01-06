@@ -1568,7 +1568,6 @@ add_action('wp_enqueue_scripts', function () {
 
     // Ton script d'ouverture de modal (inline)
     $js = <<<JS
-         <script>
             document.addEventListener('DOMContentLoaded', function () {
             function openBrochureModal() {
                 const source = document.getElementById('contact-form-brochure');
@@ -1618,7 +1617,6 @@ add_action('wp_enqueue_scripts', function () {
             }
 
         });
-    </script>
     JS;
 
     wp_add_inline_script('sweetalert2', $js);
