@@ -24,7 +24,7 @@ if( finwave_option( 'rt_project_filter' ) == 'grayscale' ) {
 			<?php finwave_post_thumbnail('finwave-size3'); ?>
 			<?php if( finwave_option( 'rt_project_ar_button' ) ) { ?>
 				<div class="rt-button">
-					<a class="btn button-5" href="<?php the_permalink();?>">MY BRIDGE-3 <i class="icon-rt-right-arrow"></i></a>
+					<a class="btn button-5" href="<?php the_permalink();?>"><i class="icon-rt-right-arrow"></i></a>
 				</div>
 			<?php } ?>
 		</div>
