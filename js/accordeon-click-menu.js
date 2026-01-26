@@ -15,7 +15,7 @@
                     if( !$href.startsWith("#") ) {
                         return; // Ne pas interférer avec les liens externes
                     }
-                    e.preventDefault();
+                    //e.preventDefault();
                     var destElement = document.getElementById($href.substring(1));
                     destElement.click(); // Simuler le clic sur l'élément cible                                        
                 });
