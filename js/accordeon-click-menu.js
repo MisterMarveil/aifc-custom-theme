@@ -19,7 +19,10 @@
                     var destElement = document.getElementById($href.substring(1));
                     destElement.click(); // Simuler le clic sur l'élément cible  
                     setTimeout(function() {
-                        destElement.scrollIntoView({ behavior: 'smooth'});                                      
+                        destElement.scrollIntoView({ 
+                            top: -200,
+                            behavior: 'smooth'
+                        });                                      
                     }, 500); // Délai pour permettre le traitement du clic avant le défilement
                 });
             });
