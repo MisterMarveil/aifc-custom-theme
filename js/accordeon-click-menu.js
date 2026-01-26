@@ -18,7 +18,9 @@
                     e.preventDefault();
                     var destElement = document.getElementById($href.substring(1));
                     destElement.click(); // Simuler le clic sur l'élément cible  
-                    destElement.scrollIntoView({ behavior: 'smooth'});                                      
+                    setTimeout(function() {
+                        destElement.scrollIntoView({ behavior: 'smooth'});                                      
+                    }, 500); // Délai pour permettre le traitement du clic avant le défilement
                 });
             });
         }
