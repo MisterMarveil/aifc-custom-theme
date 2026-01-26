@@ -1,5 +1,5 @@
 /**
- * Sticky Menu pour WordPress - Version optimisée
+ * Sticky Menu pour WordPress - Version optimisée pour desktop seulement
  */
 (function($) {
     'use strict';
@@ -7,7 +7,7 @@
     $.fn.stickyMenu = function(options) {
         const settings = $.extend({
             wrapper: 'body',
-            minWidth: 768,           // Desktop seulement
+            minWidth: 768,           // Desktop seulement (768px et plus)
             adminBar: true,          // Prendre en compte la barre admin
             animation: true,
             customClass: 'is-sticky',
@@ -29,9 +29,14 @@
                 .hide()
                 .insertBefore($menu);
             
-            // Fonction pour activer le sticky
+            // Vérifier si on est sur mobile
+            function isMobile() {
+                return $window.width() < settings.minWidth;
+            }
+            
+            // Fonction pour activer le sticky (desktop seulement)
             function activateSticky() {
-                if (isSticky) return;
+                if (isSticky || isMobile()) return;
                 
                 isSticky = true;
                 menuHeight = $menu.outerHeight();
@@ -106,15 +111,15 @@
             // Gérer le défilement
             function handleScroll() {
                 const scrollTop = $window.scrollTop();
-                const windowWidth = $window.width();
                 
-                // Vérifier la largeur minimale
-                if (windowWidth < settings.minWidth) {
+                // Vérifier si on est sur mobile
+                if (isMobile()) {
+                    // Désactiver complètement sur mobile
                     deactivateSticky();
                     return;
                 }
                 
-                // Vérifier la position
+                // Vérifier la position (desktop seulement)
                 if (scrollTop > menuTop) {
                     activateSticky();
                 } else {
@@ -124,13 +129,21 @@
             
             // Gérer le redimensionnement
             function handleResize() {
+                // Mettre à jour les dimensions
                 menuHeight = $menu.outerHeight();
                 menuTop = $menu.offset().top;
                 
-                if (isSticky) {
+                // Ajuster le placeholder si sticky actif
+                if (isSticky && !isMobile()) {
                     $placeholder.height(menuHeight);
                 }
                 
+                // Si on passe de desktop à mobile, désactiver
+                if (isMobile() && isSticky) {
+                    deactivateSticky();
+                }
+                
+                // Toujours vérifier le scroll après resize
                 handleScroll();
             }
             
@@ -169,8 +182,9 @@
         
         selectors.forEach(function(selector) {
             if ($(selector).length) {
+                // Utiliser le breakpoint de WordPress (768px pour mobile/tablette)
                 $(selector).stickyMenu({
-                    minWidth: 768,
+                    minWidth: 768, // Désactiver en dessous de 768px
                     adminBar: true,
                     animation: true,
                     callback: function(state) {

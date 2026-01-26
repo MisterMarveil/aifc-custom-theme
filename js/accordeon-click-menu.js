@@ -20,7 +20,7 @@
                     destElement.click(); // Simuler le clic sur l'élément cible  
                     setTimeout(function() {
                         destElement.scrollIntoView({ 
-                            top: -200,
+                            top: -100,
                             behavior: 'smooth'
                         });                                      
                     }, 1000); // Délai pour permettre le traitement du clic avant le défilement

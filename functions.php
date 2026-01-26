@@ -1504,14 +1504,14 @@ function rt_replace_project_texts($translated_text, $text, $domain) {
 }
 
 
-// Enqueue le script sticky menu
+// Enqueue le script sticky menu (désactivé sur mobile)
 add_action('wp_enqueue_scripts', 'enqueue_sticky_menu_script');
 function enqueue_sticky_menu_script() {
     wp_enqueue_script(
         'sticky-menu',
         get_stylesheet_directory_uri() . '/js/sticky-menu.js',
         array('jquery'),
-        '1.0.0',
+        '1.0.1', // Version mise à jour
         true
     );
     
@@ -1519,7 +1519,8 @@ function enqueue_sticky_menu_script() {
     wp_localize_script('sticky-menu', 'stickyMenuVars', array(
         'selector' => '#masthead', // Ajustez selon votre thème
         'offset' => 100,
-        'adminBar' => true
+        'adminBar' => true,
+        'mobileBreakpoint' => 768 // Désactiver en dessous de 768px
     ));
 }
 
@@ -2644,3 +2645,74 @@ function rt_widget_formation_styles() {
         <?php
     endif;    
 }
+
+// Add this to your existing rt_widget_formation_styles function or create a new one
+function rt_sticky_menu_mobile_fix() {
+    ?>
+    <style>
+        /* Désactiver complètement le sticky sur mobile */
+        @media (max-width: 767.98px) {
+            .is-sticky,
+            #masthead.is-sticky,
+            .site-header.is-sticky,
+            .navbar.is-sticky,
+            #header.is-sticky {
+                position: relative !important;
+                top: auto !important;
+                left: auto !important;
+                right: auto !important;
+                width: auto !important;
+                transform: none !important;
+                animation: none !important;
+                box-shadow: none !important;
+                z-index: auto !important;
+            }
+            
+            /* Cacher le placeholder sur mobile */
+            .sticky-placeholder {
+                display: none !important;
+            }
+            
+            /* Annuler le padding du body ajouté par le sticky */
+            body {
+                padding-top: 0 !important;
+            }
+        }
+        
+        /* Styles pour le sticky sur desktop seulement */
+        @media (min-width: 768px) {
+            .is-sticky {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                width: 100%;
+                z-index: 9999;
+                background-color: #fff;
+                box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                animation: slideDown 0.3s ease;
+            }
+            
+            /* Ajuster pour la barre d'admin WordPress */
+            .admin-bar .is-sticky {
+                top: 32px;
+            }
+            
+            @keyframes slideDown {
+                from {
+                    transform: translateY(-100%);
+                }
+                to {
+                    transform: translateY(0);
+                }
+            }
+            
+            /* Placeholder pour éviter le saut de contenu */
+            .sticky-placeholder {
+                display: block;
+            }
+        }
+    </style>
+    <?php
+}
+add_action('wp_head', 'rt_sticky_menu_mobile_fix');
