@@ -23,7 +23,7 @@
                             top: -200,
                             behavior: 'smooth'
                         });                                      
-                    }, 500); // Délai pour permettre le traitement du clic avant le défilement
+                    }, 1000); // Délai pour permettre le traitement du clic avant le défilement
                 });
             });
         }
