@@ -1523,6 +1523,25 @@ function enqueue_sticky_menu_script() {
     ));
 }
 
+// Enqueue script for services vertical menu
+add_action('wp_enqueue_scripts', 'enqueue_accordeon_click_menu_script');
+function enqueue_accordeon_click_menu_script() {
+    wp_enqueue_script(
+        'accordeon-click-menu',
+        get_stylesheet_directory_uri() . '/js/accordeon-click-menu.js',
+        array('jquery'),
+        '1.0.0',
+        true
+    );
+    
+    // Variables à passer au script
+    wp_localize_script('sticky-menu', 'stickyMenuVars', array(
+        'selector' => '#masthead', // Ajustez selon votre thème
+        'offset' => 100,
+        'adminBar' => true
+    ));
+}
+
 // Enqueue les scripts pour les événements
 add_action('wp_enqueue_scripts', 'aifc_event_scripts');
 function aifc_event_scripts() {
@@ -2613,6 +2632,13 @@ function rt_widget_formation_styles() {
                 color: #555;
                 font-size: 0.9em;
                 line-height: 1.5;
+            }
+
+            .elementskit-menu-close{
+                color: #fff;
+            }
+            .elementskit-menu-close:hover{
+                color: #fff;
             }
         </style>
         <?php
