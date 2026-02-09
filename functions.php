@@ -681,8 +681,7 @@ function rt_widget_info_formation_shortcode($atts) {
             <div class="formation-widget-infos">
                 <!-- Catégorie -->
                 <?php if (!empty($formation_data['categorie']) && !$isCompact): ?>
-                <div class="formation-widget-info-item">
-                    <span class="info-icon">📂</span>
+                <div class="formation-widget-info-item">                    
                     <div class="info-content">
                         <span class="info-label">Catégorie</span>
                         <span class="info-value"><?php echo esc_html($formation_data['categorie']); ?></span>
@@ -692,8 +691,7 @@ function rt_widget_info_formation_shortcode($atts) {
                 
                 <!-- Durée -->
                 <?php if (!empty($formation_data['duree']) && !$isCompact): ?>
-                <div class="formation-widget-info-item">
-                    <span class="info-icon">⏳</span>
+                <div class="formation-widget-info-item">                    
                     <div class="info-content">
                         <span class="info-label">Durée</span>
                         <span class="info-value"><?php echo esc_html($formation_data['duree']); ?></span>
@@ -703,8 +701,7 @@ function rt_widget_info_formation_shortcode($atts) {
                 
                 <!-- Niveau -->
                 <?php if (!empty($formation_data['niveau']) && !$isCompact): ?>
-                <div class="formation-widget-info-item">
-                    <span class="info-icon">🎓</span>
+                <div class="formation-widget-info-item">                    
                     <div class="info-content">
                         <span class="info-label">Niveau requis</span>
                         <span class="info-value"><?php echo esc_html(wp_trim_words($formation_data['niveau'], 5, '...')); ?></span>
@@ -714,8 +711,7 @@ function rt_widget_info_formation_shortcode($atts) {
                 
                 <!-- Prochaine rentrée -->
                 <?php if (!empty($formation_data['prochaine_rentree']) && !$isCompact): ?>
-                <div class="formation-widget-info-item">
-                    <span class="info-icon">📅</span>
+                <div class="formation-widget-info-item">                    
                     <div class="info-content">
                         <span class="info-label">Prochaine rentrée</span>
                         <span class="info-value"><?php echo esc_html($formation_data['prochaine_rentree']); ?></span>
@@ -725,8 +721,10 @@ function rt_widget_info_formation_shortcode($atts) {
                 
                 <!-- Prix -->
                 <?php if (!empty($formation_data['prix']) && !$isCompact): ?>
-                <div class="formation-widget-info-item formation-price">
-                    <span class="info-icon">💳</span>
+                <div class="formation-widget-info-item formation-price">                    
+                    <span class="info-icon">
+                        <svg width="3" height="3"><circle cx="5" cy="5" r="5" fill="#085247"/></svg>
+                    </span>
                     <div class="info-content">
                         <span class="info-label">Coût de la formation</span>
                         <span class="info-value"><?php echo esc_html($formation_data['prix']); ?></span>
@@ -740,7 +738,9 @@ function rt_widget_info_formation_shortcode($atts) {
                 <!-- Certification -->
                 <?php if (!empty($formation_data['certification']) && !$isCompact): ?>
                 <div class="formation-widget-info-item">
-                    <span class="info-icon">🏅</span>
+                    <span class="info-icon">
+                        <svg width="3" height="3"><circle cx="5" cy="5" r="5" fill="#085247"/></svg>
+                    </span>
                     <div class="info-content">
                         <span class="info-label">Certification</span>
                         <span class="info-value"><?php echo esc_html($formation_data['certification']); ?></span>
