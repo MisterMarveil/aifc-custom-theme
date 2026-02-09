@@ -258,11 +258,11 @@ function rt_formation_meta_box_callback($post) {
         </div>
         
         <!-- Prochaine rentrée -->
-        <div class="formation-field">
-            <label for="rt_formation_prochaine_rentree">📅 Prochaine rentrée</label>
+        <!--div class="formation-field">
+            <label for="rt_formation_prochaine_rentree"> Prochaine rentrée</label>
             <input type="text" id="rt_formation_prochaine_rentree" name="rt_formation_prochaine_rentree" 
                    value="<?php echo esc_attr($formation_prochaine_rentree); ?>" placeholder="Ex: Dates programmables selon session">
-        </div>
+        </div-->
         
         <!-- Lien de préinscription -->
         <div class="formation-field formation-field-full">
@@ -614,8 +614,7 @@ function rt_widget_info_formation_shortcode($atts) {
                   <?php 
                     $methode_pedagogique = get_post_meta(get_the_ID(), '_rt_formation_mode', true);
                     if (!empty($methode_pedagogique)) : ?>
-                        <p class="no-margin">  
-                            <span class="compact-info-icon">📥</span>                  
+                        <p class="no-margin">                                                
                             <span class="info-tag info-methode">
                                 Contenu: 
                                 <strong><small><?php echo esc_html($methode_pedagogique); ?></small></strong>
@@ -625,8 +624,7 @@ function rt_widget_info_formation_shortcode($atts) {
                  <?php endif; ?>
                 <?php if ($isCompact): ?>
                     <?php if (!empty($formation_data['certification'])): ?>
-                        <p class="no-margin">  
-                            <span class="compact-info-icon">🏅</span>                  
+                        <p class="no-margin">                              
                             <span class="info-tag info-certif">
                                 Certification: 
                                 <strong><?php echo esc_html($formation_data['certification']); ?></strong>
@@ -634,8 +632,7 @@ function rt_widget_info_formation_shortcode($atts) {
                         </p>
                     <?php endif; ?>
                     <?php if (!empty($formation_data['niveau'])): ?>
-                        <p class="no-margin">  
-                            <span class="compact-info-icon">🎓</span>
+                        <p class="no-margin">                              
                             <span class="info-tag info-niveau">
                                 Niveau Requis: 
                                 <strong><?php echo esc_html($formation_data['niveau']); ?></strong>
@@ -643,8 +640,7 @@ function rt_widget_info_formation_shortcode($atts) {
                         </p>
                     <?php endif; ?>
                     <?php if (!empty($formation_data['duree'])): ?>
-                        <p class="no-margin">  
-                            <span class="compact-info-icon">⏳</span>
+                        <p class="no-margin">                              
                             <span class="info-tag info-duree">
                                 Durée: 
                                 <strong><?php echo esc_html($formation_data['duree']); ?></strong>
@@ -652,8 +648,7 @@ function rt_widget_info_formation_shortcode($atts) {
                         </p>
                     <?php endif; ?>
                     <?php if (!empty($formation_data['prix'])): ?>
-                        <p class="no-margin">  
-                            <span class="compact-info-icon">💳</span>
+                        <p class="no-margin">                              
                             <span class="info-tag info-prix">
                                 Coût: 
                                 <strong><?php echo esc_html($formation_data['prix']); ?></strong>                                
@@ -661,15 +656,14 @@ function rt_widget_info_formation_shortcode($atts) {
                         </p>
                     <?php endif; ?>                    
                     <?php if (!empty($formation_data['paiement'])): ?>
-                        <p class="no-margin">  
-                            <span class="compact-info-icon">💳</span>
+                        <p class="no-margin">                              
                             <span class="info-tag info-paiement">
                                 Modalités: 
                                 <strong><?php echo esc_html($formation_data['paiement']); ?></strong>                                
                             </span>
                         </p>
                     <?php endif; ?>                    
-                    <?php if (!empty($formation_data['prochaine_rentree'])): ?>
+                    <?php /*if (!empty($formation_data['prochaine_rentree'])): ?>
                         <p class="no-margin">  
                             <span class="compact-info-icon">📅</span>
                             <span class="info-tag info-prochaine-rentree">
@@ -677,7 +671,7 @@ function rt_widget_info_formation_shortcode($atts) {
                                 <strong><?php echo esc_html($formation_data['prochaine_rentree']); ?></strong>  
                             </span>
                         </p>
-                    <?php endif; ?>                    
+                    <?php endif;*/ ?>                    
                 </p>
                 <?php endif; ?>
             </div>
