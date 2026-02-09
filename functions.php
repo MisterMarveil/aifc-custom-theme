@@ -416,7 +416,7 @@ function rt_fiche_formation_shortcode($atts) {
         <!-- Description courte -->
         <?php if (!empty($formation_data['description_courte'])): ?>
         <div class="formation-section formation-description">
-            <h3><span class="formation-icon">📌</span> Informations sur la Formation</h3>
+            <h3> Informations sur la Formation</h3>
             <p class="formation-desc"><?php echo esc_html($formation_data['description_courte']); ?></p>
         </div>
         <?php endif; ?>
@@ -473,7 +473,7 @@ function rt_fiche_formation_shortcode($atts) {
         <!-- Modules -->
         <?php if (!empty($formation_data['modules'])): ?>
         <div class="formation-section formation-modules">
-            <h3><span class="formation-icon">📚</span> Modules de la formation</h3>
+            <h3> Modules de la formation</h3>
             <div class="modules-list">
                 <?php 
                 $modules = explode("\n", $formation_data['modules']);
@@ -492,7 +492,7 @@ function rt_fiche_formation_shortcode($atts) {
         <!-- Public cible -->
         <?php if (!empty($formation_data['public'])): ?>
         <div class="formation-section formation-public">
-            <h3><span class="formation-icon">💼</span> Public cible</h3>
+            <h3> Public cible</h3>
             <p><?php echo nl2br(esc_html($formation_data['public'])); ?></p>
         </div>
         <?php endif; ?>
@@ -500,7 +500,7 @@ function rt_fiche_formation_shortcode($atts) {
         <!-- Méthode pédagogique -->
         <?php if (!empty($formation_data['mode'])): ?>
         <div class="formation-section formation-methode">
-            <h3><span class="formation-icon">📥</span> Méthode pédagogique</h3>
+            <h3> Méthode pédagogique</h3>
             <p><?php echo nl2br(esc_html($formation_data['mode'])); ?></p>
         </div>
         <?php endif; ?>
@@ -508,18 +508,18 @@ function rt_fiche_formation_shortcode($atts) {
         <!-- Certification -->
         <?php if (!empty($formation_data['certification'])): ?>
         <div class="formation-section formation-certification">
-            <h3><span class="formation-icon">🏅</span> Certification</h3>
+            <h3> Certification</h3>
             <p><?php echo esc_html($formation_data['certification']); ?></p>
         </div>
         <?php endif; ?>
         
         <!-- Prochaine rentrée -->
-        <?php if (!empty($formation_data['prochaine_rentree'])): ?>
+        <?php /* if (!empty($formation_data['prochaine_rentree'])): ?>
         <div class="formation-section formation-rentree">
-            <h3><span class="formation-icon">📅</span> Prochaine rentrée</h3>
+            <h3> Prochaine rentrée</h3>
             <p><?php echo esc_html($formation_data['prochaine_rentree']); ?></p>
         </div>
-        <?php endif; ?>
+        <?php endif; */ ?>
         
         <!-- Bouton de préinscription -->
         <?php $formation_data['lien_preinscription'] = !empty($formation_data['lien_preinscription']) ? $formation_data['lien_preinscription'] : "/preinscription-aux-formations-aifc/?_form=$post_id"  ?>
