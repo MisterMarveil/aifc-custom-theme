@@ -614,7 +614,10 @@ function rt_widget_info_formation_shortcode($atts) {
                   <?php 
                     $methode_pedagogique = get_post_meta(get_the_ID(), '_rt_formation_mode', true);
                     if (!empty($methode_pedagogique)) : ?>
-                        <p class="no-margin">                                                
+                        <p class="no-margin">    
+                            <span class="info-icon">
+                                <svg width="3" height="3"><circle cx="5" cy="5" r="5" fill="#085247"/></svg>
+                            </span>                                            
                             <span class="info-tag info-methode">
                                 Contenu: 
                                 <strong><small><?php echo esc_html($methode_pedagogique); ?></small></strong>
