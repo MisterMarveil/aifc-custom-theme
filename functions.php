@@ -614,10 +614,7 @@ function rt_widget_info_formation_shortcode($atts) {
                   <?php 
                     $methode_pedagogique = get_post_meta(get_the_ID(), '_rt_formation_mode', true);
                     if (!empty($methode_pedagogique)) : ?>
-                        <p class="no-margin">    
-                            <span class="info-icon">
-                                <svg width="8" height="8"><circle cx="5" cy="5" r="5" fill="#085247"/></svg>
-                            </span>                                            
+                        <p class="no-margin">                                                
                             <span class="info-tag info-methode">
                                 Contenu: 
                                 <strong><small><?php echo esc_html($methode_pedagogique); ?></small></strong>
@@ -725,9 +722,6 @@ function rt_widget_info_formation_shortcode($atts) {
                 <!-- Prix -->
                 <?php if (!empty($formation_data['prix']) && !$isCompact): ?>
                 <div class="formation-widget-info-item formation-price">                    
-                    <span class="info-icon">
-                        <svg width="3" height="3"><circle cx="5" cy="5" r="5" fill="#085247"/></svg>
-                    </span>
                     <div class="info-content">
                         <span class="info-label">Coût de la formation</span>
                         <span class="info-value"><?php echo esc_html($formation_data['prix']); ?></span>
@@ -741,9 +735,6 @@ function rt_widget_info_formation_shortcode($atts) {
                 <!-- Certification -->
                 <?php if (!empty($formation_data['certification']) && !$isCompact): ?>
                 <div class="formation-widget-info-item">
-                    <span class="info-icon">
-                        <svg width="3" height="3"><circle cx="5" cy="5" r="5" fill="#085247"/></svg>
-                    </span>
                     <div class="info-content">
                         <span class="info-label">Certification</span>
                         <span class="info-value"><?php echo esc_html($formation_data['certification']); ?></span>
