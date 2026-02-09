@@ -616,7 +616,7 @@ function rt_widget_info_formation_shortcode($atts) {
                     if (!empty($methode_pedagogique)) : ?>
                         <p class="no-margin">    
                             <span class="info-icon">
-                                <svg width="3" height="3"><circle cx="5" cy="5" r="5" fill="#085247"/></svg>
+                                <svg width="8" height="8"><circle cx="5" cy="5" r="5" fill="#085247"/></svg>
                             </span>                                            
                             <span class="info-tag info-methode">
                                 Contenu: 
